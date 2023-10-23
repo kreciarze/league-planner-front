@@ -1,4 +1,5 @@
 import {useState} from "react";
+import Link from "next/link";
 
 function Login(){
     const [loginFailed, setLoginFailed] = useState(false);
@@ -17,7 +18,7 @@ function Login(){
                     <input type="password" name="password" placeholder="Wprowadź hasło"/>
                 </label>
                 <button type="submit">Zaloguj</button>
-                <p> Nie masz konta? <a href="/register">Zarejestruj się</a></p>
+                <p> Nie masz konta? <Link href="/register">Zarejestruj się</Link></p>
             </form>
        </div>
     )
@@ -29,9 +30,13 @@ function submitLoginCredentials(e: React.FormEvent<HTMLFormElement>, setLoginFai
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
-    fetch('http://localhost:8080/login', {
+    const body = JSON.stringify({
+        username: data.username,
+        password: data.password
+    });
+    fetch('http://localhost:8080/login/', {
         method: 'POST',
-        body: JSON.stringify(data),
+        body: body,
         headers: {
             'Content-Type': 'application/json'
         },

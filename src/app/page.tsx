@@ -1,3 +1,4 @@
+import Link from "next/link"
 import "./globals.css"
 
 export default function Page () {
@@ -6,10 +7,10 @@ export default function Page () {
         <h1>Witaj w League Planner!</h1>
             <p>League Planner to aplikacja, która pomoże Ci w organizacji lig dowolnych sportów</p>
             <button>
-                <a href="/register">Zarejestruj się</a>
+                <Link href="/register">Zarejestruj się</Link>
             </button>
             <button>
-                <a href="/login">Zaloguj się</a>
+                <Link href="/login">Zaloguj się</Link>
             </button>
         </div>
     )

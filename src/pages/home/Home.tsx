@@ -1,9 +1,9 @@
-import {useEffect} from "react";
+import {useEffect, useRef} from "react";
 
 function Home () {
-    let token;
+    let token = useRef<string | null>(null);
     useEffect(() => {
-        token = localStorage.getItem('token');
+        token.current = localStorage.getItem('token');
         if(!token) {
             window.location.href = '/login';
         }
