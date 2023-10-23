@@ -1,12 +1,13 @@
 import {useState} from "react";
 import Link from "next/link";
+import "@/styles/globals.css";
 
 function Login(){
     const [loginFailed, setLoginFailed] = useState(false);
 
     return(
         <div>
-            <h1 className="bg-amber-600">Login</h1>
+            <h1 className="">Login</h1>
             <p className="text-white">Nieprawidłowa nazwa użytkownika lub hasło!</p>
             <form onSubmit={(e) => submitLoginCredentials(e, setLoginFailed)}>
                 <label>

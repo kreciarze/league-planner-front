@@ -1,5 +1,5 @@
 import {useEffect, useRef} from "react";
-
+import "@/styles/globals.css";
 function Home () {
     let token = useRef<string | null>(null);
     useEffect(() => {
