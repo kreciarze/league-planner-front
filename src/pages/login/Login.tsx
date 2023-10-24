@@ -12,11 +12,11 @@ function Login(){
             <form onSubmit={(e) => submitLoginCredentials(e, setLoginFailed)}>
                 <label>
                     <p>Nazwa użytkownika</p>
-                    <input type="text" name="username" placeholder="Wprowadź nazwę"/>
+                    <input className={"text-black"} type="text" name="username" placeholder="Wprowadź nazwę"/>
                 </label>
                 <label>
                     <p>Hasło</p>
-                    <input type="password" name="password" placeholder="Wprowadź hasło"/>
+                    <input className={"text-black"} type="password" name="password" placeholder="Wprowadź hasło"/>
                 </label>
                 <button type="submit">Zaloguj</button>
                 <p> Nie masz konta? <Link href="/register">Zarejestruj się</Link></p>
@@ -34,7 +34,7 @@ function submitLoginCredentials(e: React.FormEvent<HTMLFormElement>, setLoginFai
     const body = JSON.stringify({
         username: data.username,
         password: data.password
-    });
+    })
     fetch('http://localhost:8080/login/', {
         method: 'POST',
         body: body,
