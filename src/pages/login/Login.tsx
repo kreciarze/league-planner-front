@@ -20,14 +20,14 @@ function Login(){
                         Nazwa użytkownika
                     </p>
                     <input type="text" name="username" placeholder="Wprowadź nazwę"
-                    className="flex items-center h-12 px-4 w-64 bg-gray-200 mt-2 rounded focus:outline-none focus:ring-2 text-gray-900"/>
+                    className="flex items-center h-12 px-4 w-64 bg-gray-200 mt-2 rounded focus:outline-none focus:ring-2 text-black"/>
                 </label>
                 <label>
                     <p className="font-semibold text-lg pt-2">
                         Hasło
                     </p>
                     <input type="password" name="password" placeholder="Wprowadź hasło"
-                    className="flex items-center h-12 px-4 w-64 bg-gray-200 mt-2 rounded focus:outline-none focus:ring-2 text-gray-900"/>
+                    className="flex items-center h-12 px-4 w-64 bg-gray-200 mt-2 rounded focus:outline-none focus:ring-2 text-black"/>
                 </label>
                 <button type="submit" className="flex items-center justify-center h-12 px-6 w-64 bg-violet-600 mt-12 rounded font-semibold text-lg text-white hover:bg-violet-700">
                     Zaloguj
@@ -54,7 +54,7 @@ function submitLoginCredentials(e: React.FormEvent<HTMLFormElement>, setLoginFai
     const body = JSON.stringify({
         username: data.username,
         password: data.password
-    });
+    })
     fetch('http://localhost:8080/login/', {
         method: 'POST',
         body: body,
