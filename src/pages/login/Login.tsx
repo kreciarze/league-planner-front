@@ -6,20 +6,40 @@ function Login(){
     const [loginFailed, setLoginFailed] = useState(false);
 
     return(
-        <div>
-            <h1 className="">Login</h1>
-            <p className="text-white">Nieprawidłowa nazwa użytkownika lub hasło!</p>
-            <form onSubmit={(e) => submitLoginCredentials(e, setLoginFailed)}>
+        <div className="flex flex-col items-center justify-center w-screen h-screen bg-gray-800 text-gray-100">
+            <h1 className="font-bold text-3xl sm:text-4xl">
+                Login
+            </h1>
+            <p className="text-red-600 mt-3">
+                Nieprawidłowa nazwa użytkownika lub hasło!
+            </p>
+            <form onSubmit={(e) => submitLoginCredentials(e, setLoginFailed)} 
+            className="flex flex-col bg-gray-700 rounded p-12 mt-6">
                 <label>
-                    <p>Nazwa użytkownika</p>
-                    <input type="text" name="username" placeholder="Wprowadź nazwę"/>
+                    <p className="font-semibold text-lg">
+                        Nazwa użytkownika
+                    </p>
+                    <input type="text" name="username" placeholder="Wprowadź nazwę"
+                    className="flex items-center h-12 px-4 w-64 bg-gray-200 mt-2 rounded focus:outline-none focus:ring-2 text-gray-900"/>
                 </label>
                 <label>
-                    <p>Hasło</p>
-                    <input type="password" name="password" placeholder="Wprowadź hasło"/>
+                    <p className="font-semibold text-lg pt-2">
+                        Hasło
+                    </p>
+                    <input type="password" name="password" placeholder="Wprowadź hasło"
+                    className="flex items-center h-12 px-4 w-64 bg-gray-200 mt-2 rounded focus:outline-none focus:ring-2 text-gray-900"/>
                 </label>
-                <button type="submit">Zaloguj</button>
-                <p> Nie masz konta? <Link href="/register">Zarejestruj się</Link></p>
+                <button type="submit" className="flex items-center justify-center h-12 px-6 w-64 bg-violet-600 mt-12 rounded font-semibold text-lg text-white hover:bg-violet-700">
+                    Zaloguj
+                </button>
+                <div>
+                    <p className="flex mt-6 justify-center text-md">
+                        Nie masz konta?
+                        <Link href="/register" className="pl-2 text-violet-400 hover:text-purple-400">
+                            Zarejestruj się
+                        </Link>
+                    </p>
+                </div>
             </form>
        </div>
     )

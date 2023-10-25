@@ -4,27 +4,49 @@ import Link from "next/link";
 function Register () {
     const [failedRegister, setFailedRegister] = useState(false);
   return (
-    <div>
-      <h1>Register</h1>
-        <form onSubmit={(e) => submitRegisterData(e, setFailedRegister)}>
+    <div className="flex flex-col items-center justify-center w-screen h-screen bg-gray-800 text-gray-100">
+        <h1 className="font-bold text-3xl sm:text-4xl">
+            Register
+        </h1>
+        <form onSubmit={(e) => submitRegisterData(e, setFailedRegister)}
+        className="flex flex-col bg-gray-700 rounded p-12 mt-6">
             <label>
-                <p>Nazwa użytkownika</p>
-                <input type="text" name="username" placeholder="Wprowadź nazwę"/>
+                <p className="font-semibold text-lg">
+                    Nazwa użytkownika
+                </p>
+                <input type="text" name="username" placeholder="Wprowadź nazwę"
+                className="flex items-center h-12 px-4 w-64 bg-gray-200 mt-2 rounded focus:outline-none focus:ring-2 text-gray-900"/>
             </label>
             <label>
-                <p>Adres email</p>
-                <input type="email" name="email" placeholder="Wprowadź adres email"/>
+                <p className="font-semibold text-lg pt-2">
+                    Adres email
+                </p>
+                <input type="email" name="email" placeholder="Wprowadź adres email"
+                className="flex items-center h-12 px-4 w-64 bg-gray-200 mt-2 rounded focus:outline-none focus:ring-2 text-gray-900"/>
             </label>
             <label>
-                <p>Hasło</p>
-                <input type="password" name="password" placeholder="Wprowadź hasło"/>
+                <p className="font-semibold text-lg pt-2">
+                    Hasło
+                </p>
+                <input type="password" name="password" placeholder="Wprowadź hasło"
+                className="flex items-center h-12 px-4 w-64 bg-gray-200 mt-2 rounded focus:outline-none focus:ring-2 text-gray-900"/>
             </label>
             <label>
-                <p>Powtórz hasło</p>
-                <input type="password" name="password2" placeholder="Wprowadź hasło"/>
+                <p className="font-semibold text-lg pt-2">
+                    Powtórz hasło
+                </p>
+                <input type="password" name="password2" placeholder="Wprowadź hasło"
+                className="flex items-center h-12 px-4 w-64 bg-gray-200 mt-2 rounded focus:outline-none focus:ring-2 text-gray-900"/>
             </label>
-            <button type="submit">Zarejestruj</button>
-            <p> Masz już konto? <Link href="/login">Zaloguj się</Link></p>
+            <button type="submit" className="flex items-center justify-center h-12 px-6 w-64 bg-violet-600 mt-12 rounded font-semibold text-lg text-white hover:bg-violet-700">
+                Zarejestruj
+            </button>
+            <p className="flex mt-6 justify-center text-md"> 
+                Masz już konto? 
+                <Link href="/login" className="pl-2 text-violet-400 hover:text-purple-400">
+                    Zaloguj się
+                </Link>
+            </p>
         </form>
     </div>
   )
