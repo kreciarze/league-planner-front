@@ -1,3 +1,5 @@
+import { registerUser } from "@/endpoints";
+
 type RegisterData = {
     username: string;
     password: string;
@@ -17,39 +19,7 @@ export function submitRegisterData(e: React.FormEvent<HTMLFormElement>, failSett
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData) as RegisterData;
     const isDataValid = validateRegisterData(data, failSetters);
-    fetch('http://localhost:8080/register/', {
-        method: 'POST',
-        body: JSON.stringify({
-            username: data.username,
-            password: data.password
-        }),
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include'
-    })
-        .then(response => {
-            if (response.status < 300) {
-                window.location.href = '/login';
-            } else if (response.status === 400) {
-                // Handle specific error cases
-                // You can extract the error message from the response and display it to the user.
-                response.json().then(errorData => {
-                    console.log(errorData);
-                    // You can set a state variable to display the error to the user.
-                });
-            } else {
-                console.log('Unexpected Error');
-                failSetters.setFailedRegister(true);
-            }
-        })
-        .catch(error => {
-            console.log('Network Error:', error);
-            failSetters.setFailedRegister(true);
-        })
-        .finally(() => {
-            console.log('finally');
-        });
+    registerUser(data, failSetters).then();
 }
 
 function validateRegisterData(data: RegisterData, failSetters: FailSettersType) {
