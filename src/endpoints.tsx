@@ -145,17 +145,14 @@ export async function createLeague(
     })
         .then(response => {
             if(response.ok) {
+                window.location.href = '/home';
                 return response.json();
             }
             throw new Error('Login failed');
         })
-        .then(
-            (data) => {
-                return data;
-            }
-        )
         .catch(error => {
             console.log("errorek: ", error);
+            return error;
         });
 }
 
@@ -446,7 +443,7 @@ export async function getMatches(
             }
         )
         .catch(error => {
-            console.log("errorek: ", error);
+            console.log("Error while getting matches: ", error);
         });
 }
 
@@ -477,7 +474,7 @@ export async function createMatch(
             }
         )
         .catch(error => {
-            console.log("errorek: ", error);
+            console.log("Error while creating match: ", error);
         });
 }
 
