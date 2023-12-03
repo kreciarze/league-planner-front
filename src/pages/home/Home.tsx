@@ -1,6 +1,5 @@
 import {useEffect, useRef} from "react";
 import "@/styles/globals.css";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import Link from "next/link";
 function Home () {
     let token = useRef<string | null>(null);

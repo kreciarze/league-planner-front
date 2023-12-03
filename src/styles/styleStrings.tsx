@@ -1,12 +1,6 @@
 let styleSheet = {
-    link: "text-decoration-none text-white",
-    button: "btn btn-info",
-    bgImage: " bg-image",
-    centeredContainer: "container d-flex flex-column justify-content-center align-items-center transition-all duration-500 ease-in-out",
-    form: "d-flex flex-column gap-3",
-    inputFailed: "w-100 p-2 border border-danger",
-    inputSuccess: "w-100 p-2 border border-success",
-    centerItems: "d-flex flex-column justify-content-center align-items-center w-100 h-100"
+    purpleButton: "px-8 py-3 m-2 text-lg font-semibold rounded bg-violet-400 text-gray-900 hover:bg-violet-600 hover:text-white",
+    textInput: "flex items-center h-12 px-4 w-64 bg-gray-200 mt-2 rounded focus:outline-none focus:ring-2 text-black"
 }
 
 export default styleSheet;

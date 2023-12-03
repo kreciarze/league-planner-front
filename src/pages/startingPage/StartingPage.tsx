@@ -1,34 +1,24 @@
 import Link from "next/link";
-import styleSheet from "@/styles/styleStrings";
-import Image from "next/image";
 import "./background.jpg";
-import 'bootstrap/dist/css/bootstrap.min.css';
-
+import styleSheet from "@/styles/styleStrings";
 function StartingPage(){
 
     return (
         <>
-            <div className="bg-image">
-                <Image src={"/background.jpg"}
-                    alt="Picture"
-                    width={1920}
-                    height={1080}
-                />
-            </div>
-            <div className="container-fluid d-flex flex-column justify-content-center align-items-center transition-all duration-500 ease-in-out ">
-                <div className="">
-                    <h1 className="text-center">
+            <div className="space-y-12 bg-gray-800 text-gray-100 min-h-screen">
+                <div className="flex flex-col items-center px-4 py-40 mx-auto text-center md:px-10 lg:px-32 xl:max-w-4xl">
+                    <h1 className="text-4xl font-bold sm:text-5xl">
                         Witaj w League Planner!
                     </h1>
-                    <p className="">
+                    <p className="px-8 mt-8 mb-12 text-lg">
                         League Planner to aplikacja, która pomoże Ci w organizacji lig dowolnych sportów
                     </p>
-                    <div className="d-flex justify-content-evenly">
-                        <button className={styleSheet.button}>
-                            <Link className={styleSheet.link} href="/register">Zarejestruj się</Link>
+                    <div className="flex flex-wrap justify-center gap-4">
+                        <button className={styleSheet.purpleButton}>
+                            <Link href="/register">Zarejestruj się</Link>
                         </button>
-                        <button className={styleSheet.button}>
-                            <Link className={styleSheet.link} href="/login">Zaloguj się</Link>
+                        <button className={styleSheet.purpleButton}>
+                            <Link href="/login">Zaloguj się</Link>
                         </button>
                     </div>
                 </div>
