@@ -1,6 +1,7 @@
 import {useEffect, useRef} from "react";
 import "@/styles/globals.css";
 import Link from "next/link";
+import Navbar from "@/components/navbar";
 function Home () {
     let token = useRef<string | null>(null);
     useEffect(() => {
@@ -10,26 +11,15 @@ function Home () {
         }
     }, [token]);
 
+
+
     return (
-        <nav className={"bg-info-subtle"}>
-            <Link href={"/leagues"}>
-                <button className={"btn"}>Wszystkie ligi</button>
-            </Link>
-            <Link href={"/leagues"}>
-                <button className={"btn"}>Twoje ligi</button>
-            </Link>
-            <Link href="/addLeague">
-                <button className={"btn"}>Dodaj ligę</button>
-            </Link>
-            <button className={"btn"} onClick={() => Logout()}>Wyloguj</button>
-        </nav>
+        <>
+            <Navbar token={token.current}/>
+
+        </>
     )
 }
 
 export default Home;
 
-function Logout(token: string | null = null) {
-    token = null;
-    localStorage.removeItem('token');
-    window.location.href = '/';
-}

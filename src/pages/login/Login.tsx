@@ -24,14 +24,14 @@ function Login(){
                         Nazwa użytkownika
                     </p>
                     <input type="text" name="username" placeholder="Wprowadź nazwę"
-                           className={styleSheet.textInput + "w-full my-8"}/>
+                           className={styleSheet.textInput + " w-full my-8"}/>
                 </label>
                 <label>
                     <p className="font-semibold text-lg pt-2">
                         Hasło
                     </p>
                     <input type="password" name="password" placeholder="Wprowadź hasło"
-                           className={styleSheet.textInput + "w-full my-8"}/>
+                           className={styleSheet.textInput + " w-full my-8"}/>
                 </label>
                 <button type="submit" className={styleSheet.purpleButton}>
                     Zaloguj

@@ -14,18 +14,18 @@ function AddLeague(){
 
     const [leagueName, setLeagueName] = useState("");
     return (
-        <div className={styleSheet.centeredContainer + " col-8 my-5 py-5 px-5 bg-info-subtle"}>
+        <>
             <h1>Dodaj ligę</h1>
             <input type="text" name="leagueName" placeholder="Wprowadź nazwę ligi" onChange={(e) => setLeagueName(e.target.value)}/>
             <button className={"btn btn-primary w-100 my-3"}
-                onClick={
-                () => {
-                    createLeague(leagueName, token.current);
-                }
-            }>
-            Dodaj ligę
+                    onClick={
+                        () => {
+                            createLeague(leagueName, token.current);
+                        }
+                    }>
+                Dodaj ligę
             </button>
-        </div>
+        </>
     )
 }
 
