@@ -124,7 +124,7 @@ export async function getLeagues(
             }
         )
         .catch(error => {
-            console.log("errorek: ", error);
+            console.log("Error in getLeagues: ", error);
         });
 }
 
@@ -151,7 +151,7 @@ export async function createLeague(
             throw new Error('Login failed');
         })
         .catch(error => {
-            console.log("errorek: ", error);
+            console.log("Error while creating leagues: ", error);
             return error;
         });
 }
@@ -320,7 +320,7 @@ export async function getTeams(
             }
         )
         .catch(error => {
-            console.log("errorek: ", error);
+            console.log("Error while getting teams: ", error);
         });
 }
 
@@ -351,7 +351,7 @@ export async function createTeam(
             }
         )
         .catch(error => {
-            console.log("errorek: ", error);
+            console.log("Error while creating teams: ", error);
         });
 }
 

@@ -7,15 +7,16 @@ function classNames(...classes: string[]) {
 }
 export default function Navbar(
     props: {
+        getCurrentPage?: string;
         token: string | null;
     }
 ) {
-    const {token} = props;
-    const [currentPage, setCurrentPage] = useState('Strona główna');
+    const {token, getCurrentPage} = props;
+    const [currentPage, setCurrentPage] = useState(getCurrentPage || 'Strona główna');
     const navigation = [
         { name: 'Strona główna', href: '/home', current: currentPage === 'Strona główna' },
-        { name: 'Wszystkie ligi', href: '/leagues', current: currentPage === 'Wszystkie ligi' },
-        { name: 'Twoje ligi', href: '/leagues',   current: currentPage === 'Twoje ligi' },
+        { name: 'Wszystkie ligi', href: '/leagueList', current: currentPage === 'Wszystkie ligi' },
+        { name: 'Twoje ligi', href: '/leagueList',   current: currentPage === 'Twoje ligi' },
         { name: 'Dodaj ligę', href: '/addLeague', current: currentPage === 'Dodaj ligę' },
         { name: 'Wyloguj', href: '/', current: currentPage === 'Wyloguj', onClick: () => Logout(token) },
     ]
