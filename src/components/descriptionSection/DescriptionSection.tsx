@@ -1,7 +1,7 @@
-import { CloudArrowUpIcon, LockClosedIcon, ServerIcon } from '@heroicons/react/20/solid'
+import { CalendarIcon , TrophyIcon , UserGroupIcon  } from '@heroicons/react/20/solid'
 
 function DescriptionSection() {
-    //TODO: zmienić treść na bardziej pasującą do aplikacji
+    
     return (
         <div className="relative isolate overflow-hidden bg-white px-6 py-24 sm:py-32 lg:overflow-visible lg:px-0">
             <div className="absolute inset-0 -z-10 overflow-hidden">
@@ -34,11 +34,10 @@ function DescriptionSection() {
                 <div className="lg:col-span-2 lg:col-start-1 lg:row-start-1 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
                     <div className="lg:pr-4">
                         <div className="lg:max-w-lg">
-                            <p className="text-base font-semibold leading-7 text-indigo-600">Deploy faster</p>
-                            <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">A better workflow</h1>
+                            <p className="text-base font-semibold leading-7 text-indigo-600">Zarządzaj swoimi ligami</p>
+                            <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Łatwe zarządzanie rozgrywkami</h1>
                             <p className="mt-6 text-xl leading-8 text-gray-700">
-                                Aliquet nec orci mattis amet quisque ullamcorper neque, nibh sem. At arcu, sit dui mi, nibh dui, diam
-                                eget aliquam. Quisque id at vitae feugiat egestas.
+                            Twórz, modyfikuj i przeglądaj ligi sportowe w prosty i efektywny sposób.
                             </p>
                         </div>
                     </div>
@@ -55,46 +54,34 @@ function DescriptionSection() {
                     <div className="lg:pr-4">
                         <div className="max-w-xl text-base leading-7 text-gray-700 lg:max-w-lg">
                             <p>
-                                Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget risus enim. Mattis mauris semper sed amet
-                                vitae sed turpis id. Id dolor praesent donec est. Odio penatibus risus viverra tellus varius sit neque
-                                erat velit. Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget risus enim. Mattis mauris
-                                semper sed amet vitae sed turpis id.
+                            Skorzystaj z intuicyjnego interfejsu do tworzenia lig, planowania rozgrywek i śledzenia wyników.
                             </p>
                             <ul role="list" className="mt-8 space-y-8 text-gray-600">
                                 <li className="flex gap-x-3">
-                                    <CloudArrowUpIcon className="mt-1 h-5 w-5 flex-none text-indigo-600" aria-hidden="true" />
+                                    <CalendarIcon  className="mt-1 h-5 w-5 flex-none text-indigo-600" aria-hidden="true" />
                                     <span>
-                    <strong className="font-semibold text-gray-900">Push to deploy.</strong> Lorem ipsum, dolor sit amet
-                    consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate
-                    blanditiis ratione.
+                    <strong className="font-semibold text-gray-900">Planuj harmonogram.</strong> Twórz i zarządzaj harmonogramem spotkań, ustawiając daty meczów i wydarzeń ligowych.
                   </span>
                                 </li>
                                 <li className="flex gap-x-3">
-                                    <LockClosedIcon className="mt-1 h-5 w-5 flex-none text-indigo-600" aria-hidden="true" />
+                                    <TrophyIcon  className="mt-1 h-5 w-5 flex-none text-indigo-600" aria-hidden="true" />
                                     <span>
-                    <strong className="font-semibold text-gray-900">SSL certificates.</strong> Anim aute id magna aliqua
-                    ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.
+                    <strong className="font-semibold text-gray-900">Śledź wyniki.</strong> Na bieżąco śledź rezultaty meczów, statystyki drużyn i aktualną pozycję w tabeli.
                   </span>
                                 </li>
                                 <li className="flex gap-x-3">
-                                    <ServerIcon className="mt-1 h-5 w-5 flex-none text-indigo-600" aria-hidden="true" />
+                                    <UserGroupIcon  className="mt-1 h-5 w-5 flex-none text-indigo-600" aria-hidden="true" />
                                     <span>
-                    <strong className="font-semibold text-gray-900">Database backups.</strong> Ac tincidunt sapien
-                    vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.
+                    <strong className="font-semibold text-gray-900">Dołącz do społeczności.</strong> Przeglądaj ligi innych pasjonatów sportu, biorąc udział w naszej aktywnej społeczności. Odkrywaj różnorodne rozgrywki oraz dziel się swoimi ulubionymi ligami.
                   </span>
                                 </li>
                             </ul>
                             <p className="mt-8">
-                                Et vitae blandit facilisi magna lacus commodo. Vitae sapien duis odio id et. Id blandit molestie auctor
-                                fermentum dignissim. Lacus diam tincidunt ac cursus in vel. Mauris varius vulputate et ultrices hac
-                                adipiscing egestas. Iaculis convallis ac tempor et ut. Ac lorem vel integer orci.
+                            Dzięki League Planner, zarządzanie ligami sportowymi stanie się przyjemnością. Dodawaj drużyny, planuj kolejne mecze i dziel się swoimi rozgrywkami!
                             </p>
-                            <h2 className="mt-16 text-2xl font-bold tracking-tight text-gray-900">No server? No problem.</h2>
+                            <h2 className="mt-16 text-2xl font-bold tracking-tight text-gray-900"></h2>
                             <p className="mt-6">
-                                Id orci tellus laoreet id ac. Dolor, aenean leo, ac etiam consequat in. Convallis arcu ipsum urna nibh.
-                                Pharetra, euismod vitae interdum mauris enim, consequat vulputate nibh. Maecenas pellentesque id sed
-                                tellus mauris, ultrices mauris. Tincidunt enim cursus ridiculus mi. Pellentesque nam sed nullam sed diam
-                                turpis ipsum eu a sed convallis diam.
+                            
                             </p>
                         </div>
                     </div>
