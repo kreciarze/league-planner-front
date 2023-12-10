@@ -1,7 +1,8 @@
-import {Fragment, useState} from 'react'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useState } from 'react'
+import { Disclosure } from '@headlessui/react'
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import Link from "next/link";
+import Image from "next/image";
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
@@ -9,17 +10,15 @@ export default function Navbar(
     props: {
         getCurrentPage?: string;
         token: string | null;
+        navigation: (
+            {name: string; href: string; onClick?: undefined; }
+            |
+            {name: string; href: string; onClick: (token: string) => void; })[]
     }
 ) {
-    const {token, getCurrentPage} = props;
+    const {token, getCurrentPage, navigation} = props;
     const [currentPage, setCurrentPage] = useState(getCurrentPage || 'Strona główna');
-    const navigation = [
-        { name: 'Strona główna', href: '/home', current: currentPage === 'Strona główna' },
-        { name: 'Wszystkie ligi', href: '/leagueList', current: currentPage === 'Wszystkie ligi' },
-        { name: 'Twoje ligi', href: '/leagueList',   current: currentPage === 'Twoje ligi' },
-        { name: 'Dodaj ligę', href: '/addLeague', current: currentPage === 'Dodaj ligę' },
-        { name: 'Wyloguj', href: '/', current: currentPage === 'Wyloguj', onClick: () => Logout(token) },
-    ]
+
     return (
         <Disclosure as="nav" className="bg-gray-800">
             {({ open }) => (
@@ -40,10 +39,12 @@ export default function Navbar(
                             </div>
                             <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                                 <div className="flex flex-shrink-0 items-center">
-                                    <img
+                                    <Image
                                         className="h-8 w-auto"
                                         src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
                                         alt="Your Company"
+                                        width="30"
+                                        height="30"
                                     />
                                 </div>
                                 <div className="hidden sm:ml-6 sm:block">
@@ -53,10 +54,10 @@ export default function Navbar(
                                                 key={item.name}
                                                 href={item.href}
                                                 className={classNames(
-                                                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                                                    item.name === getCurrentPage ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                                                     'rounded-md px-3 py-2 text-sm font-medium'
                                                 )}
-                                                aria-current={item.current ? 'page' : undefined}
+                                                aria-current={item.name === getCurrentPage ? 'page' : undefined}
                                                 onClick={() => setCurrentPage(item.name)}
                                             >
                                                 {item.name}
@@ -76,10 +77,10 @@ export default function Navbar(
                                     as="a"
                                     href={item.href}
                                     className={classNames(
-                                        item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                                        item.name === getCurrentPage ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                                         'block rounded-md px-3 py-2 text-base font-medium'
                                     )}
-                                    aria-current={item.current ? 'page' : undefined}
+                                    aria-current={item.name === getCurrentPage ? 'page' : undefined}
                                 >
                                     {item.name}
                                 </Disclosure.Button>
@@ -93,8 +94,3 @@ export default function Navbar(
 }
 
 
-function Logout(token: string | null = null) {
-    token = null;
-    localStorage.removeItem('token');
-    window.location.href = '/';
-}

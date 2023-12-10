@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import styleSheet from "@/styles/styleStrings";
-import { submitRegisterData } from "./registerLogic";
+import submitRegisterData from "./registerLogic";
 import "@/styles/globals.css";
 
 function Register() {

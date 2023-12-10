@@ -1,4 +1,5 @@
 import {FormEvent} from "react";
+import {FailSettersType, RegisterData} from "@/pages/register/registerLogic";
 
 const url = 'http://localhost:8080/';
 
@@ -105,24 +106,23 @@ export async function updateLeague(
 export async function getLeagues(
     token: string | null
 ) {
-    fetch(endpoints.leagues, {
+    return fetch(endpoints.leagues, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': "Token " + (token || '')
+            'Authorization': "Token " + (token || ''),
         }
     })
         .then(response => {
-            if(response.ok) {
+            if (response.ok) {
                 return response.json();
             }
             throw new Error('Login failed');
         })
         .then(
             (data) => {
-                return data;
-            }
-        )
+                return data.results;
+            })
         .catch(error => {
             console.log("Error in getLeagues: ", error);
         });
@@ -132,6 +132,7 @@ export async function createLeague(
     leagueName: string,
     token: string | null
 ) {
+    console.log("token: ", token);
     const body = JSON.stringify({
         name: leagueName
     })
@@ -145,7 +146,6 @@ export async function createLeague(
     })
         .then(response => {
             if(response.ok) {
-                window.location.href = '/home';
                 return response.json();
             }
             throw new Error('Login failed');
@@ -157,15 +157,10 @@ export async function createLeague(
 }
 
 export async function registerUser(
-    data: {
-        username: string,
-        password: string
-    },
-    failSetters: {
-        setFailedRegister: (value: boolean) => void
-    }
+    data: RegisterData,
+    failSetters: FailSettersType
 ){
-    fetch(endpoints.register, {
+    return fetch(endpoints.register, {
         method: 'POST',
         body: JSON.stringify({
             username: data.username,
@@ -177,14 +172,12 @@ export async function registerUser(
         credentials: 'include'
     })
         .then(response => {
-            if (response.status < 300) {
-                window.location.href = '/login';
+            if (response.ok) {
+                failSetters.setFailedRegister(false);
+                return response;
             } else if (response.status === 400) {
-                // Handle specific error cases
-                // You can extract the error message from the response and display it to the user.
                 response.json().then(errorData => {
                     console.log(errorData);
-                    // You can set a state variable to display the error to the user.
                 });
             } else {
                 console.log('Error while registering user:');
@@ -194,7 +187,9 @@ export async function registerUser(
         .catch(error => {
             console.log('Error while registering user:', error);
             failSetters.setFailedRegister(true);
-        })
+            return error;
+        });
+
 }
 
 export async function login(e: FormEvent<HTMLFormElement>, setLoginFailed: (arg0: boolean) => void) {
@@ -208,6 +203,7 @@ export async function login(e: FormEvent<HTMLFormElement>, setLoginFailed: (arg0
     fetch(endpoints.login, {
         method: 'POST',
         body: body,
+        mode: 'cors',
         headers: {
             'Content-Type': 'application/json',
         },

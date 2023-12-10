@@ -1,23 +1,18 @@
 import "@/styles/globals.css";
 import { createLeague } from "@/endpoints";
-import {useEffect, useRef, useState} from "react";
-import styleSheet from "@/styles/styleStrings";
-import Navbar from "@/components/navbar";
+import {useState} from "react";
+import Navbar from "../../components/navbar";
 import Footer from "@/components/footer/Footer";
+import useToken from "@/hooks/useToken/UseToken";
+import {leagueNavigation} from "@/components/navbar/navigationObjects";
 
 function AddLeague(){
-    let token = useRef<string | null>(null);
-    useEffect(() => {
-        token.current = document.cookie.split('; ').find(row => row.startsWith('token'))?.split('=')[1] || null;
-        if(!token || token.current === null) {
-            window.location.href = '/login';
-        }
-    }, [token]);
+    const token = useToken();
 
     const [leagueName, setLeagueName] = useState("");
     return (
         <>
-            <Navbar token={token.current} getCurrentPage={"Dodaj ligę"}/>
+            <Navbar token={token.current} navigation={leagueNavigation} getCurrentPage={"Strona główna"}/>
             <div className="hero min-h-screen bg-base-200">
                 <div className="flex flex-col items-center lg:flex-row-reverse">
                     <div className="text-center lg:text-left mx-24">
@@ -28,8 +23,7 @@ function AddLeague(){
                         <form className="card-body" onSubmit={async (e) => {
                             e.preventDefault();
                             await createLeague(leagueName, token.current);
-                            console.log(leagueName);
-                            // window.location.href = '/leagueList';
+                            // window.location.href = '/home';
                         }}>
                             <div className="form-control">
                                 <label className="label">

@@ -1,24 +1,17 @@
-import {useEffect, useRef} from "react";
 import "@/styles/globals.css";
-import Link from "next/link";
-import Navbar from "@/components/navbar";
+import Navbar from "../../components/navbar";
 import CtaSection from "@/components/ctaSection";
 import Footer from "@/components/footer/Footer";
 import DescriptionSection from "../../components/descriptionSection";
+import useToken from "@/hooks/useToken/UseToken";
+import {leagueNavigation} from "@/components/navbar/navigationObjects";
+
 function Home () {
-    let token = useRef<string | null>(null);
-    useEffect(() => {
-        token.current = document.cookie.split('; ').find(row => row.startsWith('token'))?.split('=')[1] || null;
-        if(!token || token.current === null) {
-            window.location.href = '/login';
-        }
-    }, [token]);
-
-
+    const token = useToken();
 
     return (
         <div className={"bg-gray-900"}>
-            <Navbar token={token.current}/>
+            <Navbar token={token.current} navigation={leagueNavigation} getCurrentPage={"Strona główna"}/>
             <CtaSection/>
             <DescriptionSection />
             <Footer/>
