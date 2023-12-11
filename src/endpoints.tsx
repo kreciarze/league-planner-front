@@ -1,5 +1,5 @@
 import {FormEvent} from "react";
-import {FailSettersType, RegisterData} from "@/pages/register/registerLogic";
+import {FailSettersType, RegisterData} from "@/types/types";
 
 const url = 'http://localhost:8080/';
 
@@ -117,7 +117,7 @@ export async function getLeagues(
             if (response.ok) {
                 return response.json();
             }
-            throw new Error('Login failed');
+            throw new Error('LoginView failed');
         })
         .then(
             (data) => {
@@ -132,7 +132,6 @@ export async function createLeague(
     leagueName: string,
     token: string | null
 ) {
-    console.log("token: ", token);
     const body = JSON.stringify({
         name: leagueName
     })
@@ -148,7 +147,8 @@ export async function createLeague(
             if(response.ok) {
                 return response.json();
             }
-            throw new Error('Login failed');
+            else
+                throw new Error('LoginView failed');
         })
         .catch(error => {
             console.log("Error while creating leagues: ", error);
@@ -192,7 +192,7 @@ export async function registerUser(
 
 }
 
-export async function login(e: FormEvent<HTMLFormElement>, setLoginFailed: (arg0: boolean) => void) {
+export async function Login(e: FormEvent<HTMLFormElement>, setLoginFailed: (arg0: boolean) => void) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
@@ -213,13 +213,13 @@ export async function login(e: FormEvent<HTMLFormElement>, setLoginFailed: (arg0
             if(response.ok) {
                 return response.json();
             }
-            throw new Error('Login failed');
+            throw new Error('LoginView failed');
         })
         .then(
             (data) => {
-                if(!data.token) throw new Error('Login failed');
-                document.cookie = `token=${data.token}`;
-                window.location.href = '/home';
+                if(!data.token) throw new Error('LoginView failed');
+                document.cookie = `token=${data.token}; sameSite=strict`;
+                window.location.href = '/homeView';
             }
         )
         .catch(error => {
@@ -297,7 +297,7 @@ export async function deleteTeam(
 export async function getTeams(
     token: string | null
 ) {
-    fetch(endpoints.teams, {
+    return fetch(endpoints.teams, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -308,7 +308,7 @@ export async function getTeams(
             if(response.ok) {
                 return response.json();
             }
-            throw new Error('Login failed');
+            throw new Error('LoginView failed');
         })
         .then(
             (data) => {
@@ -339,7 +339,7 @@ export async function createTeam(
             if(response.ok) {
                 return response.json();
             }
-            throw new Error('Login failed');
+            throw new Error('LoginView failed');
         })
         .then(
             (data) => {
@@ -420,7 +420,7 @@ export async function deleteMatch(
 export async function getMatches(
     token: string | null
 ) {
-    fetch(endpoints.matches, {
+    return fetch(endpoints.matches, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -431,7 +431,7 @@ export async function getMatches(
             if(response.ok) {
                 return response.json();
             }
-            throw new Error('Login failed');
+            throw new Error('LoginView failed');
         })
         .then(
             (data) => {
@@ -462,7 +462,7 @@ export async function createMatch(
             if(response.ok) {
                 return response.json();
             }
-            throw new Error('Login failed');
+            throw new Error('LoginView failed');
         })
         .then(
             (data) => {

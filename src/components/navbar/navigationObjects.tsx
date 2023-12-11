@@ -1,25 +1,21 @@
 export const leagueNavigation = [
-    { name: 'Strona główna', href: '/home'},
-    { name: 'Wszystkie ligi', href: '/leagueList'},
-    { name: 'Twoje ligi', href: '/leagueList'},
-    { name: 'Dodaj ligę', href: '/addLeague'},
+    { name: 'Strona główna', href: '/homeView'},
+    { name: 'Wszystkie ligi', href: '/listModel/league'},
+    { name: 'Dodaj ligę', href: '/addModel/league'},
     { name: 'Wyloguj', href: '/', onClick: (token: string) => Logout(token) },
 ]
 
 export const teamNavigation = [
-    { name: 'Strona główna', href: '/home'},
-    { name: 'Lista drużyn', href: '/teamList'},
-    { name: 'Lista meczów', href: '/matchList'},
-    {name: 'Lista turniejów', href: '/tournamentList'},
-    {name: 'Lista zawodników', href: '/playerList'},
-    { name: 'Dodaj drużynę', href: '/addTeam'},
-    { name: 'Dodaj mecz', href: '/addMatch'},
-    { name: 'Dodaj turniej', href: '/addTournament'},
-    { name: 'Dodaj zawodnika', href: '/addPlayer'},
+    { name: 'Strona główna', href: '/homeView'},
+    { name: 'Lista drużyn', href: '/listModel/team'},
+    { name: 'Lista meczów', href: '/listModel/match'},
+    { name: 'Lista zawodników', href: '/playerList'},
+    { name: 'Dodaj drużynę', href: '/addModel/team'},
+    { name: 'Dodaj mecz', href: '/addModel/match'},
     { name: 'Wyloguj', href: '/', onClick: (token: string) => Logout(token) },
 ]
-function Logout(token: string | null = null) {
+function Logout(token: string | null) {
     token = null;
-    localStorage.removeItem('token');
-    window.location.href = '/';
+    //remove cookie token
+    document.cookie = "";
 }

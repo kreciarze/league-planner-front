@@ -1,8 +1,9 @@
-import StartingPage from "@/pages/startingPage";
-
+import StartingPage from "../pages/startingView";
 export default function Page () {
     return (
-        <StartingPage/>
+        <>
+            <StartingPage/>
+        </>
     )
 
 }

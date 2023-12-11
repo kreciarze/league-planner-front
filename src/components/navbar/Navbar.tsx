@@ -16,7 +16,8 @@ export default function Navbar(
             {name: string; href: string; onClick: (token: string) => void; })[]
     }
 ) {
-    const {token, getCurrentPage, navigation} = props;
+    //TODO: fix current page problem
+    const { getCurrentPage, navigation} = props;
     const [currentPage, setCurrentPage] = useState(getCurrentPage || 'Strona główna');
 
     return (
@@ -48,7 +49,7 @@ export default function Navbar(
                                     />
                                 </div>
                                 <div className="hidden sm:ml-6 sm:block">
-                                    <div className="flex space-x-4">
+                                    <div className="flex justify-center items-center space-x-4">
                                         {navigation.map((item) => (
                                             <Link
                                                 key={item.name}
