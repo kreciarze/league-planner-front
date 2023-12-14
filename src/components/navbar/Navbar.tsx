@@ -3,6 +3,7 @@ import { Disclosure } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import Link from "next/link";
 import Image from "next/image";
+import {useRouter} from "next/router";
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
@@ -19,6 +20,7 @@ export default function Navbar(
     //TODO: fix current page problem
     const { getCurrentPage, navigation} = props;
     const [currentPage, setCurrentPage] = useState(getCurrentPage || 'Strona główna');
+    const router = useRouter();
 
     return (
         <Disclosure as="nav" className="bg-gray-800">
@@ -51,18 +53,20 @@ export default function Navbar(
                                 <div className="hidden sm:ml-6 sm:block">
                                     <div className="flex justify-center items-center space-x-4">
                                         {navigation.map((item) => (
-                                            <Link
+                                            <button
                                                 key={item.name}
-                                                href={item.href}
                                                 className={classNames(
                                                     item.name === getCurrentPage ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                                                     'rounded-md px-3 py-2 text-sm font-medium'
                                                 )}
                                                 aria-current={item.name === getCurrentPage ? 'page' : undefined}
-                                                onClick={() => setCurrentPage(item.name)}
+                                                onClick={() => {
+                                                    setCurrentPage(item.name);
+                                                    router.push(item.href.includes('[id]') ? item.href.replace('[id]', router.query.id as string) : item.href);
+                                                }}
                                             >
                                                 {item.name}
-                                            </Link>
+                                            </button>
                                         ))}
                                     </div>
                                 </div>
@@ -76,12 +80,14 @@ export default function Navbar(
                                 <Disclosure.Button
                                     key={item.name}
                                     as="a"
-                                    href={item.href}
                                     className={classNames(
                                         item.name === getCurrentPage ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                                         'block rounded-md px-3 py-2 text-base font-medium'
                                     )}
                                     aria-current={item.name === getCurrentPage ? 'page' : undefined}
+                                    onClick={() =>
+                                        router.push(item.href.includes('[id]') ? item.href.replace('[id]', router.query.id as string) : item.href)
+                                    }
                                 >
                                     {item.name}
                                 </Disclosure.Button>

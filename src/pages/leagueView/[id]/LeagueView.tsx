@@ -1,3 +1,4 @@
+'use client';
 import {useRouter} from "next/router";
 import useToken from "@/hooks/useToken";
 import {teamNavigation} from "@/components/navbar/navigationObjects";
@@ -7,6 +8,7 @@ import Footer from "@/components/footer/Footer";
 function LeagueView(){
     const router = useRouter();
     let token = useToken();
+
 
     return (
         <div>

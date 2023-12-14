@@ -1,5 +1,5 @@
 import {FormEvent} from "react";
-import {FailSettersType, RegisterData} from "@/types/types";
+import {FailSettersType, League, Match, RegisterData, Team} from "@/types/types";
 
 const url = 'http://localhost:8080/';
 
@@ -129,19 +129,19 @@ export async function getLeagues(
 }
 
 export async function createLeague(
-    leagueName: string,
+    body: League,
     token: string | null
 ) {
-    const body = JSON.stringify({
-        name: leagueName
-    })
+    const body_stringify = JSON.stringify({
+        name: body.name
+    });
     fetch(endpoints.leagues, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': "Token " + (token || '')
         },
-        body: body
+        body: body_stringify
     })
         .then(response => {
             if(response.ok) {
@@ -295,7 +295,8 @@ export async function deleteTeam(
 }
 
 export async function getTeams(
-    token: string | null
+    token: string | null,
+    leagueId: string
 ) {
     return fetch(endpoints.teams, {
         method: 'GET',
@@ -321,19 +322,24 @@ export async function getTeams(
 }
 
 export async function createTeam(
-    teamName: string,
-    token: string | null
+    body: Team,
+    token: string | null,
+    leagueId: string
 ) {
-    const body = JSON.stringify({
-        name: teamName
-    })
+
+    const body_stringify = JSON.stringify(
+        {
+            name: body.name,
+            league: leagueId
+        }
+    );
     fetch(endpoints.teams, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': "Token " + (token || '')
         },
-        body: body
+        body: body_stringify
     })
         .then(response => {
             if(response.ok) {
@@ -444,19 +450,18 @@ export async function getMatches(
 }
 
 export async function createMatch(
-    matchName: string,
+    body: Match,
     token: string | null
 ) {
-    const body = JSON.stringify({
-        name: matchName
-    })
+    console.log("Tworzenie meczu");
+    const body_stringify = JSON.stringify(body);
     fetch(endpoints.matches, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': "Token " + (token || '')
         },
-        body: body
+        body: body_stringify
     })
         .then(response => {
             if(response.ok) {

@@ -2,13 +2,15 @@ import {leagueNavigation, teamNavigation} from "@/components/navbar/navigationOb
 import {createLeague, createMatch, createTeam} from "@/endpoints";
 
 function UseAddModel(slug: string) {
+    slug = slug.includes("+") ? slug.split("+")[0] : slug;
     const navigation = slug === "league" ? leagueNavigation : teamNavigation;
-    const recordCreator = slug === "league" ? createLeague : (slug === "team" ? createTeam : createMatch);
-    //TODO: dodać żeby zwracało obiekt z tekstem do wyświetlenia w AddModel.tsx, zrobić osobny plik do trzymania różnych tekstów
+    const createEndpoint = slug === "league" ? createLeague : (slug === "team" ? createTeam : createMatch);
+    //TODO: dodać żeby zwracało obiekt z tekstem do wyświetlenia w AddNewLeague.tsx, zrobić osobny plik do trzymania różnych tekstów
 
     return {
         navigation,
-        recordCreator
+        createEndpoint,
+        addModelType: slug,
     }
 }
 

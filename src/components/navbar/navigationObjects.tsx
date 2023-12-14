@@ -1,17 +1,17 @@
 export const leagueNavigation = [
     { name: 'Strona główna', href: '/homeView'},
-    { name: 'Wszystkie ligi', href: '/listModel/league'},
-    { name: 'Dodaj ligę', href: '/addModel/league'},
+    { name: 'Wszystkie ligi', href: '/listLeagues'},
+    { name: 'Dodaj ligę', href: '/addNewLeague'},
     { name: 'Wyloguj', href: '/', onClick: (token: string) => Logout(token) },
 ]
 
 export const teamNavigation = [
     { name: 'Strona główna', href: '/homeView'},
-    { name: 'Lista drużyn', href: '/listModel/team'},
-    { name: 'Lista meczów', href: '/listModel/match'},
-    { name: 'Lista zawodników', href: '/playerList'},
-    { name: 'Dodaj drużynę', href: '/addModel/team'},
-    { name: 'Dodaj mecz', href: '/addModel/match'},
+    { name: 'Lista drużyn', href: '/leagueView/[id]/listInLeague/team'},
+    { name: 'Lista meczów', href: '/leagueView/[id]/listInLeague/match'},
+    { name: 'Lista zawodników', href: '/leagueView/[id]/playerList'},
+    { name: 'Dodaj drużynę', href: '/leagueView/[id]/addToLeague/team'},
+    { name: 'Dodaj mecz', href: '/leagueView/[id]/addToLeague/match'},
     { name: 'Wyloguj', href: '/', onClick: (token: string) => Logout(token) },
 ]
 function Logout(token: string | null) {

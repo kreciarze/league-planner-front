@@ -1,7 +1,6 @@
 export type League = {
     id: number,
     name: string,
-    owner: string
 };
 
 export type Team = {
@@ -13,13 +12,14 @@ export type Team = {
 
 export type Match = {
     id: number,
-    name: string,
     league: number,
-    homeTeam: number,
-    awayTeam: number,
-    homeTeamScore: number,
-    awayTeamScore: number,
-    date: string
+    host: number,
+    host_score: number,
+    visitor: number,
+    visitor_score: number,
+    datetime: string
+    address: string
+    city: string
 };
 
 export type RegisterData = {
