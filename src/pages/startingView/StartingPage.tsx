@@ -2,7 +2,7 @@ import Link from "next/link";
 import "./background.jpg";
 import styleSheet from "@/styles/styleStrings";
 function StartingPage(){
-
+    //TODO: Można trochę urozmaicić, nie trzeba w sumie, taki task na sam koniec mało ważny
     return (
         <>
             <div className="space-y-12 bg-gray-800 text-gray-100 min-h-screen">

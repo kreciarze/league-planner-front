@@ -18,14 +18,14 @@ function ListLeagues() {
             setItemsList(items);
             setSearchResults(items);
         });
-    }, [token, getLeagues]);
+    }, [token]);
 
   return (
       <>
           <div className={"min-h-screen"}>
               <Navbar token={token.current} navigation={leagueNavigation} getCurrentPage={"Wszystkie ligi"}/>
               <CardsList list={itemsList} searchResults={searchResults}
-                                setSearchResults={setSearchResults} />
+                                setSearchResults={setSearchResults} cardsType={"league"}/>
           </div>
           <Footer/>
       </>

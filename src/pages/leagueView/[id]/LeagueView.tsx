@@ -13,7 +13,8 @@ function LeagueView(){
     return (
         <div>
             <Navbar token={token.current} navigation={teamNavigation} getCurrentPage={"Strona główna"}/>
-            <h1>LeagueView {router.query.id}</h1>
+            {/*TODO: potrzebujemy tu jakiegoś contentu, czegokolwiek w sumie by*/}
+            <main className={"flex flex-col items-center justify-center min-h-screen"}> LeagueView {router.query.id}</main>
             <Footer/>
         </div>
     )

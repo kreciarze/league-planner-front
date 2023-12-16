@@ -1,5 +1,5 @@
 function Footer() {
-
+    //TODO: zcustomizować footer żeby było w nim coś sensownego idk
   return (
       <footer className="footer p-10 bg-neutral text-neutral-content">
         <nav>

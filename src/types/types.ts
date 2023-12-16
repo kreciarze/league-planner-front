@@ -1,6 +1,8 @@
 export type League = {
     id: number,
     name: string,
+    owner: string,
+    owner_login: string
 };
 
 export type Team = {

@@ -27,11 +27,11 @@ function HeroSection() {
                           Nie jesteś zainteresowany ligą? Możesz również stworzyć turniej lub rozgrywki
                       </p>
                       <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
-                          <Link href="/src/pages/addNewLeague/league"
+                          <Link href="/addNewLeague/"
                              className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
                               Załóż ligę
                           </Link>
-                          <Link href="/src/pages/listLeagues/league"
+                          <Link href="/listLeagues/"
                                 className="text-sm font-semibold leading-6 text-white">Sprawdź swoje ligi <span
                               aria-hidden="true">→</span></Link>
                       </div>

@@ -15,6 +15,22 @@ const endpoints = {
     register: url + 'register/',
 }
 
+//TODO: przerzucić wszystkie linki aby korzystały z tego poniżej a nie stringów
+export const hrefs = {
+    homeView: '/homeView',
+    listLeagues: '/listLeagues',
+    addNewLeague: '/addNewLeague',
+    listTeams: '/listTeams',
+    listMatches: '/listMatches',
+    addNewTeam: '/addNewTeam',
+    addNewMatch: '/addNewMatch',
+    leagueView: '/leagueView',
+    teamView: '/teamView',
+    matchView: '/matchView',
+    listInLeague: '/listInLeague',
+    listInTeam: '/listInTeam',
+}
+
 export function getScoreboard(
     id: string,
     token: string | null
@@ -451,10 +467,19 @@ export async function getMatches(
 
 export async function createMatch(
     body: Match,
-    token: string | null
+    token: string | null,
+    leagueId: string
 ) {
-    console.log("Tworzenie meczu");
-    const body_stringify = JSON.stringify(body);
+    const body_stringify = JSON.stringify({
+        league: leagueId,
+        host: body.host,
+        host_score: 0,
+        visitor: body.visitor,
+        visitor_score: 0,
+        datetime: body.datetime,
+        address: body.address,
+        city: body.city
+    });
     fetch(endpoints.matches, {
         method: 'POST',
         headers: {

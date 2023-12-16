@@ -16,21 +16,21 @@ function ListInLeague() {
     const [itemsList, setItemsList] = useState<League[]>([]);
     const [searchResults, setSearchResults] = useState<League[]>([]);
     const getItems = itemName === "team" ? getTeams : getMatches;
+    const cardsType = itemName === "team" ? "team" : "match";
 
     useEffect(() => {
         getItems(token.current, leagueId).then((items) => {
-            console.log(items);
             setItemsList(items.results);
             setSearchResults(items.results);
         });
-    }, [token, getItems]);
+    }, [token, leagueId, getItems]);
 
   return (
       <>
           <div className={"min-h-screen"}>
               <Navbar token={token.current} navigation={teamNavigation} getCurrentPage={"Wszystkie ligi"}/>
               <CardsList list={itemsList} searchResults={searchResults}
-                         setSearchResults={setSearchResults} />
+                         setSearchResults={setSearchResults} cardsType={cardsType}/>
           </div>
           <Footer/>
       </>
