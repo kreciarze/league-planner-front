@@ -7,7 +7,7 @@ import Footer from "@/components/footer/Footer";
 
 function LeagueView(){
     const router = useRouter();
-    let token = useToken();
+    let {token} = useToken();
 
 
     return (

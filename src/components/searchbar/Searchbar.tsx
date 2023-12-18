@@ -22,7 +22,7 @@ function SearchBar(
             case "team":
                 let teamResults = list as Team[];
                 teamResults = teamResults.filter((team) => {
-                    return team.name.toLowerCase().includes(searchQuery.toLowerCase());
+                    return team.name?.toLowerCase().includes(searchQuery.toLowerCase());
                 });
                 setSearchResults(teamResults);
                 break;

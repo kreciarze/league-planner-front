@@ -8,7 +8,7 @@ import {getLeagues} from "@/endpoints";
 import {leagueNavigation} from "@/components/navbar/navigationObjects";
 
 function ListLeagues() {
-    let token = useToken();
+    let {token, username} = useToken();
     const [itemsList, setItemsList] = useState<League[]>([]);
     const [searchResults, setSearchResults] = useState<League[]>([]);
 

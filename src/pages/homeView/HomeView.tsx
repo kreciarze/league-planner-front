@@ -7,7 +7,7 @@ import useToken from "@/hooks/useToken/UseToken";
 import {leagueNavigation} from "@/components/navbar/navigationObjects";
 
 function HomeView () {
-    const token = useToken();
+    const {token} = useToken();
 
     return (
         <div className={"bg-gray-900"}>

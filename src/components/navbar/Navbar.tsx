@@ -62,7 +62,7 @@ export default function Navbar(
                                                 aria-current={item.name === getCurrentPage ? 'page' : undefined}
                                                 onClick={() => {
                                                     setCurrentPage(item.name);
-                                                    router.push(item.href.includes('[id]') ? item.href.replace('[id]', router.query.id as string) : item.href);
+                                                    router.push(item.href.includes('[matchId]') ? item.href.replace('[matchId]', router.query.id as string) : item.href);
                                                 }}
                                             >
                                                 {item.name}
@@ -86,7 +86,7 @@ export default function Navbar(
                                     )}
                                     aria-current={item.name === getCurrentPage ? 'page' : undefined}
                                     onClick={() =>
-                                        router.push(item.href.includes('[id]') ? item.href.replace('[id]', router.query.id as string) : item.href)
+                                        router.push(item.href.includes('[matchId]') ? item.href.replace('[matchId]', router.query.id as string) : item.href)
                                     }
                                 >
                                     {item.name}

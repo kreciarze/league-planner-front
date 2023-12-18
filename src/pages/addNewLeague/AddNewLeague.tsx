@@ -11,7 +11,7 @@ import InputField from "@/components/inputField";
 
 
 function AddNewLeague(){
-    const token = useToken();
+    const {token} = useToken();
     const [leagueName, setLeagueName] = useState<League>({} as League);
     const router = useRouter();
 

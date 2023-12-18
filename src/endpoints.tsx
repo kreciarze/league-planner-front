@@ -98,15 +98,18 @@ export async function deleteLeague(
 }
 
 export async function updateLeague(
-    id: string,
+    league: League,
     token: string | null
 ) {
-    fetch(endpoints.leagueDetails.replace(':id', id), {
-        method: 'PUT',
+    fetch(endpoints.leagueDetails.replace(':id', `${league.id}`), {
+        method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': "Token " + (token || '')
-        }
+        },
+        body: JSON.stringify({
+            name: league.name,
+        })
     })
         .then(response => response.json())
         .then(
@@ -211,10 +214,10 @@ export async function registerUser(
 export async function Login(e: FormEvent<HTMLFormElement>, setLoginFailed: (arg0: boolean) => void) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData);
+    const inputData = Object.fromEntries(formData)
     const body = JSON.stringify({
-        username: data.username,
-        password: data.password
+        username: inputData.username,
+        password: inputData.password
     })
     fetch(endpoints.login, {
         method: 'POST',
@@ -235,6 +238,8 @@ export async function Login(e: FormEvent<HTMLFormElement>, setLoginFailed: (arg0
             (data) => {
                 if(!data.token) throw new Error('LoginView failed');
                 document.cookie = `token=${data.token}; sameSite=strict`;
+                document.cookie = `username=${inputData.username}; sameSite=strict`;
+                console.log(document.cookie)
                 window.location.href = '/homeView';
             }
         )
@@ -245,15 +250,18 @@ export async function Login(e: FormEvent<HTMLFormElement>, setLoginFailed: (arg0
 }
 
 export async function updateTeam(
-    id: string,
+    team: Team,
     token: string | null
 ) {
-    fetch(endpoints.teamDetails.replace(':id', id), {
-        method: 'PUT',
+    fetch(endpoints.teamDetails.replace(':id', `${team.id}`), {
+        method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': "Token " + (token || '')
-        }
+        },
+        body: JSON.stringify({
+            name: team.name,
+        })
     })
         .then(response => response.json())
         .then(
@@ -374,15 +382,21 @@ export async function createTeam(
 }
 
 export async function updateMatch(
-    id: string,
+    matchId: string,
+    hostScore: number,
+    visitorScore: number,
     token: string | null
 ) {
-    fetch(endpoints.matchDetails.replace(':id', id), {
-        method: 'PUT',
+    fetch(endpoints.matchDetails.replace(':id', matchId), {
+        method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': "Token " + (token || '')
-        }
+        },
+        body: JSON.stringify({
+            host_score: hostScore,
+            visitor_score: visitorScore
+        })
     })
         .then(response => response.json())
         .then(
@@ -399,21 +413,20 @@ export async function getMatchDetails(
     id: string,
     token: string | null
 ) {
-    fetch(endpoints.matchDetails.replace(':id', id), {
+    return fetch(endpoints.matchDetails.replace(':id', id), {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': "Token " + (token || '')
         }
     })
-        .then(response => response.json())
-        .then(
-            (data) => {
-                return data;
-            }
+        .then(response => {
+            return response.json()
+        }
         )
         .catch(error => {
             console.log("Error while getting match details: ", error);
+            return error;
         });
 }
 

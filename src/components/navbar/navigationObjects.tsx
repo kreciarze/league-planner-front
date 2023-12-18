@@ -7,10 +7,10 @@ export const leagueNavigation = [
 
 export const teamNavigation = [
     { name: 'Strona główna', href: '/homeView'},
-    { name: 'Lista drużyn', href: '/leagueView/[id]/listInLeague/team'},
-    { name: 'Lista meczów', href: '/leagueView/[id]/listInLeague/match'},
-    { name: 'Dodaj drużynę', href: '/leagueView/[id]/addToLeague/team'},
-    { name: 'Dodaj mecz', href: '/leagueView/[id]/addToLeague/match'},
+    { name: 'Lista drużyn', href: '/leagueView/[matchId]/listInLeague/team'},
+    { name: 'Lista meczów', href: '/leagueView/[matchId]/listInLeague/match'},
+    { name: 'Dodaj drużynę', href: '/leagueView/[matchId]/addToLeague/team'},
+    { name: 'Dodaj mecz', href: '/leagueView/[matchId]/addToLeague/match'},
     { name: 'Wyloguj', href: '/', onClick: (token: string) => Logout(token) },
 ]
 function Logout(token: string | null) {

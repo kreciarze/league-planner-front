@@ -11,7 +11,7 @@ import SelectInput from "@/components/selectInput";
 import {optionObject} from "@/components/selectInput/SelectInput";
 
 function AddToLeague() {
-    const token = useToken();
+    const {token} = useToken();
     const router = useRouter();
     const leagueId = router.query.id as string;
     const itemName = router.query.item;
@@ -43,7 +43,7 @@ function RenderInput(
     const [homeTeam, setHomeTeam] = useState<optionObject>({} as optionObject);
     const [visitor, setVisitor] = useState<optionObject>({} as optionObject);
     const [options, setOptions] = useState<optionObject[]>([] as optionObject[]);
-    const token = useToken();
+    const {token} = useToken();
     const [failed, setFailed] = useState(false);
 
     useEffect(() => {

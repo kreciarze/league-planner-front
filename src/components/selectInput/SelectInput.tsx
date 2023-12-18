@@ -9,9 +9,10 @@ function SelectInput(
         title: string,
         items: optionObject[],
         setInputObject: Function,
+        value?: number
     }
 ) {
-    const {title, items, setInputObject} = props;
+    const {title, items, setInputObject, value} = props;
   return (
       <>
         <label className="label">
@@ -27,7 +28,7 @@ function SelectInput(
                               }
                           })
                       }
-                  }>
+                  } defaultValue={value ? value : ""}>
               <option disabled>{title}</option>
               {items?.map((item) => (
                   <option value={item.value} key={item.value}>{item.label}</option>

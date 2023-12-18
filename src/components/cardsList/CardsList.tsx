@@ -7,11 +7,10 @@ export default function LeaguesCardsList(
         list: League[] | Team[] | Match[],
         searchResults: League[] | Team[] | Match[],
         setSearchResults: Function,
-        cardsType: string
+        cardsType: string,
     }
 ) {
     const {list, searchResults, setSearchResults, cardsType } = props;
-    console.log(list)
     return (
         <div className={"flex flex-col items-center my-12"}>
             <SearchBar list={list} setSearchResults={setSearchResults} cardsType={cardsType}/>

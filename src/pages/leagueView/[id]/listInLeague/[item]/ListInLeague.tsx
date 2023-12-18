@@ -12,7 +12,7 @@ function ListInLeague() {
     const router = useRouter();
     const leagueId = router.query.id as string;
     const itemName = router.query.item as string;
-    const token = useToken();
+    const {token} = useToken();
     const [itemsList, setItemsList] = useState<League[]>([]);
     const [searchResults, setSearchResults] = useState<League[]>([]);
     const getItems = itemName === "team" ? getTeams : getMatches;
@@ -30,7 +30,7 @@ function ListInLeague() {
           <div className={"min-h-screen"}>
               <Navbar token={token.current} navigation={teamNavigation} getCurrentPage={"Wszystkie ligi"}/>
               <CardsList list={itemsList} searchResults={searchResults}
-                         setSearchResults={setSearchResults} cardsType={cardsType}/>
+                         setSearchResults={setSearchResults} cardsType={cardsType} />
           </div>
           <Footer/>
       </>
