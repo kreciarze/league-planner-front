@@ -1,5 +1,3 @@
-import {Match} from "@/types/types";
-
 export type optionObject = {
     value: number,
     label: string
@@ -21,14 +19,9 @@ function SelectInput(
           <select className="select w-full max-w-xs border-2 border-gray-300 focus:outline-none focus:border-purple-500"
                   onChange={
                       (e) => {
-                          setInputObject((prev: optionObject) => {
-                              return {
-                                  label: prev.label,
-                                  value: parseInt(e.target.value)
-                              }
-                          })
+                          setInputObject(e.target.value);
                       }
-                  } defaultValue={value ? value : ""}>
+                  } defaultValue={title}>
               <option disabled>{title}</option>
               {items?.map((item) => (
                   <option value={item.value} key={item.value}>{item.label}</option>

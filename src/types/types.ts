@@ -9,7 +9,8 @@ export type Team = {
     id: number,
     name: string,
     league: number,
-    owner: string
+    owner: string,
+    city: string
 };
 
 export type Match = {

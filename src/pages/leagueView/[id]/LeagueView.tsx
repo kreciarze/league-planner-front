@@ -1,4 +1,4 @@
-'use client';
+import '@/styles/globals.css';
 import {useRouter} from "next/router";
 import useToken from "@/hooks/useToken";
 import {teamNavigation} from "@/components/navbar/navigationObjects";

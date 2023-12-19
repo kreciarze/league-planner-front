@@ -1,3 +1,4 @@
+import '@/styles/globals.css';
 import {useRouter} from "next/router";
 import Navbar from "@/components/navbar";
 import useToken from "@/hooks/useToken";
@@ -17,11 +18,28 @@ function AddToLeague() {
     const itemName = router.query.item;
     const [inputObject, setInputObject] = useState<Team & Match>({} as Team & Match);
 
+    const [failed, setFailed] = useState(false);
     return (
         <>
             <Navbar token={token.current} navigation={teamNavigation} getCurrentPage={"Strona główna"}/>
             <div className="hero min-h-screen bg-base-200">
-                <RenderInput leagueId={leagueId as string} itemName={itemName as string} setInputObject={setInputObject} inputObject={inputObject}/>
+                <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+                    <div className="card-body">
+                        {
+                            itemName === "match" &&
+                            <MatchInputBody inputObject={inputObject} setInputObject={setInputObject}
+                                            leagueId={leagueId} setFailed={setFailed}/>
+                        }
+                        {
+                            itemName === "team" &&
+                            <TeamInputBody inputObject={inputObject} setInputObject={setInputObject} leagueId={leagueId}
+                                           setFailed={setFailed}/>
+                        }
+                        {
+                            failed && <p className={"text-red-500"}>Wypełnij wszystkie pola</p>
+                        }
+                    </div>
+                </div>
             </div>
             <Footer/>
         </>
@@ -30,25 +48,68 @@ function AddToLeague() {
 
 export default AddToLeague;
 
-function RenderInput(
+function TeamInputBody(
     props: {
-        itemName: string
         setInputObject: Function
+        inputObject: Team
         leagueId: string
-        inputObject: Team & Match
+        setFailed: Function
     }
-){
-    const {itemName, setInputObject, inputObject, leagueId} = props;
-    const createEndpoint = itemName === "team" ? createTeam : createMatch;
-    const [homeTeam, setHomeTeam] = useState<optionObject>({} as optionObject);
-    const [visitor, setVisitor] = useState<optionObject>({} as optionObject);
-    const [options, setOptions] = useState<optionObject[]>([] as optionObject[]);
+) {
+    const {setInputObject, inputObject, leagueId, setFailed} = props;
     const {token} = useToken();
-    const [failed, setFailed] = useState(false);
+    const router = useRouter();
+    return (<>
+        <InputField type={"text"} placeholder={"Nazwa drużyny"} onChange={(e: string) => {
+            setInputObject((prev: Team) => {
+                return {
+                    ...prev,
+                    name: e
+                }
+            })
+        }} label={"Nazwa drużyny"} value={inputObject.name} required={true} />
+        <InputField type={"text"} placeholder={"Miasto"} onChange={(e: string) => {
+            setInputObject((prev: Team) => {
+                return {
+                    ...prev,
+                    city: e
+                }
+            })
+        }} label={"Miasto"} value={inputObject.city} required={true} />
+        <div className="form-control">
+            <label className="label">
+                <span className="label-text">Opis drużyny</span>
+            </label>
+            <textarea placeholder="Opis drużyny" className="textarea h-24 textarea-bordered" required/>
+        </div>
+        <div className="form-control mt-6">
+            <button className="btn btn-primary" onClick={() => {
+                createTeam(inputObject, token.current, leagueId).then((response)=>{
+                    if(response.ok)
+                        router.push(`/leagueView/${leagueId}`)
+                    else
+                        setFailed(true);
+                })
+            }}
+            >Dodaj</button>
+        </div>
+    </>)
+}
 
+function MatchInputBody(
+    props: {
+        setInputObject: Function
+        inputObject: Match
+        leagueId: string
+        setFailed: Function
+    }
+) {
+    const {setInputObject, inputObject, leagueId, setFailed} = props;
+    const {token} = useToken();
+    const router = useRouter();
+    const [options, setOptions] = useState<optionObject[]>([] as optionObject[]);
     useEffect(() => {
         getTeams(token.current, leagueId).then((teams) => {
-
             setOptions(teams?.results.map((team: Team) => {
                 return {
                     value: team.id,
@@ -58,109 +119,74 @@ function RenderInput(
         });
     }, [token, leagueId]);
 
-    switch (itemName) {
-        case "team":
-            return (
-                <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-                    <div className="card-body">
-                        <InputField type={"text"} placeholder={"Nazwa drużyny"} onChange={() => {
-                            setInputObject((prev: Team) => {
-                                return {
-                                    ...prev,
-                                    name: inputObject.name
-                                }
-                            })
-                        }} label={"Nazwa drużyny"} value={inputObject.name} required={true} />
-                        <InputField type={"text"} placeholder={"Miasto"} onChange={() => {
-                            setInputObject((prev: Team) => {
-                                return {
-                                    ...prev,
-                                    city: inputObject.city
-                                }
-                            })
-                        }} label={"Miasto"} value={inputObject.city} required={true} />
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Opis drużyny</span>
-                            </label>
-                            <textarea placeholder="Opis drużyny" className="textarea h-24 textarea-bordered" required/>
-                        </div>
-                        <div className="form-control mt-6">
-                            <button className="btn btn-primary" onClick={() => {
-                                createEndpoint(inputObject, token.current, leagueId);
-                            }}
-                            >Dodaj</button>
-                        </div>
-                    </div>
-                </div>
-            );
-        case "match":
-            return (
-                <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-                    <form className="card-body" onSubmit={async (e) => {
-                        e.preventDefault();
-                        await createEndpoint(inputObject, token.current, leagueId);
-                    }}>
-                        <InputField type={"datetime-local"} placeholder={"Data meczu"} onChange={(value: string) => {
-                            setInputObject((prev: Match) => {
-                                return {
-                                    ...prev,
-                                    dateTime: value
-                                }
-                            })
+    return (
+        <>
+            <InputField type={"datetime-local"} placeholder={"Data meczu"} onChange={(value: string) => {
+                setInputObject((prev: Match) => {
+                    return {
+                        ...prev,
+                        datetime: value
+                    }
+                })
+            }
+            } label={"Data meczu"} value={inputObject.datetime} required={true} />
+            <SelectInput title={"Gospodarz"} items={options} setInputObject={(e: string) => {
+                setInputObject((prev: Match) => {
+                    return {
+                        ...prev,
+                        host: e
+                    }
+                })
+            }}/>
+            <SelectInput title={"Gość"} items={options} setInputObject={(e: string) => {
+                setInputObject((prev: Match) => {
+                    return {
+                        ...prev,
+                        visitor: e
+                    }
+                })
+            }
+            }/>
+            <InputField type={"text"} placeholder={"Adres"} onChange={(e: string) => {
+                setInputObject((prev: Match) => {
+                    return {
+                        ...prev,
+                        address: e
+                    }
+                })
+            }} label={"Adres"} value={inputObject.address} required={true} />
+            <InputField type={"text"} placeholder={"Miasto"} onChange={(e: string) => {
+                setInputObject((prev: Match) => {
+                    return {
+                        ...prev,
+                        city: e
+                    }
+                })
+            }
+            } label={"Miasto"} value={inputObject.city} required={true} />
+            <div className="form-control mt-6">
+                <button className="btn btn-primary" onClick={
+                    () => {
+                        if(
+                            inputObject.address === undefined ||
+                            inputObject.city === undefined ||
+                            inputObject.datetime === undefined ||
+                            inputObject.host === undefined ||
+                            inputObject.visitor === undefined ||
+                            inputObject.host === inputObject.visitor
+                        ) {
+                            setFailed(true);
+                            return;
                         }
-                        } label={"Data meczu"} value={inputObject.datetime} required={true} />
-                        <SelectInput title={"Gospodarz"} items={options} setInputObject={setHomeTeam}/>
-                        <SelectInput title={"Gość"} items={options} setInputObject={setVisitor}/>
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Adres</span>
-                            </label>
-                            <input type="text" placeholder="Adres" className="input input-bordered" required onChange={
-                                (e) => {
-                                    setInputObject((prev: Match) => {
-                                        return {
-                                            ...prev,
-                                            address: e.target ? e.target.value : ""
-                                        }
-                                    });
-                                }
-                            }/>
-                        </div>
-                        <div className="form-control mt-6">
-                            <button className="btn btn-primary" onClick={
-                                (e) => {
-                                    e.preventDefault();
-                                    setInputObject((prev: Match) => {
-                                        prev = {
-                                            ...prev,
-                                            host: homeTeam.value,
-                                            visitor: visitor.value,
-                                            city: "",
-                                        };
-                                        return prev;
-                                    });
-                                    if(
-                                        !homeTeam.value ||
-                                        !visitor.value ||
-                                        !inputObject.address ||
-                                        !inputObject.datetime
-                                    ){
-                                        setFailed(true);
-                                        return;
-                                    }
-                                    createEndpoint({
-                                        ...inputObject,
-                                        host: homeTeam.value,
-                                        visitor: visitor.value,
-                                        city: "",
-                                    }, token.current, leagueId);
-                                }
-                            }>Dodaj</button>
-                        </div>
-                    </form>
-                </div>
-            );
-    }
-
+                        createMatch(inputObject, token.current, leagueId).then((response) => {
+                            if (response.ok)
+                                router.push(`/leagueView/${leagueId}`)
+                            else
+                                setFailed(true);
+                        })
+                    }
+                }>Dodaj</button>
+            </div>
+        </>
+    )
 }

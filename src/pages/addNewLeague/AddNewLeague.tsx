@@ -12,7 +12,7 @@ import InputField from "@/components/inputField";
 
 function AddNewLeague(){
     const {token} = useToken();
-    const [leagueName, setLeagueName] = useState<League>({} as League);
+    const [leagueData, setLeagueData] = useState<League>({} as League);
     const router = useRouter();
 
     return (
@@ -22,7 +22,15 @@ function AddNewLeague(){
                 <div className="flex flex-col items-center lg:flex-row-reverse">
                     <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
                         <form className="card-body">
-                            <InputField type={"text"} placeholder={"Nazwa ligi"} onChange={setLeagueName} label={"Nazwa ligi"} value={leagueName.name} required={true} />
+                            <InputField type={"text"} placeholder={"Nazwa ligi"} onChange={(e: string) => {
+                                setLeagueData((prev:League) => {
+                                    return {
+                                        ...prev,
+                                        name: e
+                                    }
+                                });
+                            }
+                            } value={leagueData?.name ?? ""} label={"Nazwa ligi"} required={true}/>
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Opis ligi</span>
@@ -33,7 +41,7 @@ function AddNewLeague(){
                                 <button className="btn btn-primary" onClick={
                                     (e) => {
                                         e.preventDefault();
-                                        createLeague(leagueName, token.current).then(() => {
+                                        createLeague(leagueData, token.current).then(() => {
                                             router.push('/listLeagues');
                                         }
                                         );

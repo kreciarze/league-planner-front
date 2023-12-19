@@ -79,21 +79,17 @@ export async function deleteLeague(
     id: string,
     token: string | null
 ) {
-    fetch(endpoints.leagueDetails.replace(':id', id), {
+    return fetch(endpoints.leagueDetails.replace(':id', id), {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': "Token " + (token || '')
         }
     })
-        .then(response => response.json())
-        .then(
-            (data) => {
-                return data;
-            }
-        )
+        .then(response => {return response})
         .catch(error => {
             console.log("Error while deleting league: ", error);
+            return error;
         });
 }
 
@@ -151,6 +147,9 @@ export async function createLeague(
     body: League,
     token: string | null
 ) {
+    console.log({
+        name: body.name
+    })
     const body_stringify = JSON.stringify({
         name: body.name
     });
@@ -300,21 +299,17 @@ export async function deleteTeam(
     id: string,
     token: string | null
 ) {
-    fetch(endpoints.teamDetails.replace(':id', id), {
+    return fetch(endpoints.teamDetails.replace(':id', id), {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': "Token " + (token || '')
         }
     })
-        .then(response => response.json())
-        .then(
-            (data) => {
-                return data;
-            }
-        )
+        .then(response => { return response; })
         .catch(error => {
             console.log("Error while deleting team: ", error);
+            return error;
         });
 }
 
@@ -322,7 +317,10 @@ export async function getTeams(
     token: string | null,
     leagueId: string
 ) {
-    return fetch(endpoints.teams, {
+    let url = new URL(endpoints.teams);
+    url.searchParams.append('league', leagueId);
+    url.searchParams.append('page_size', '100');
+    return fetch(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -350,14 +348,14 @@ export async function createTeam(
     token: string | null,
     leagueId: string
 ) {
-
     const body_stringify = JSON.stringify(
         {
             name: body.name,
             league: leagueId
         }
     );
-    fetch(endpoints.teams, {
+    console.log(body);
+    return fetch(endpoints.teams, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -366,18 +364,11 @@ export async function createTeam(
         body: body_stringify
     })
         .then(response => {
-            if(response.ok) {
-                return response.json();
-            }
-            throw new Error('LoginView failed');
+            return response;
         })
-        .then(
-            (data) => {
-                return data;
-            }
-        )
         .catch(error => {
             console.log("Error while creating teams: ", error);
+            return error;
         });
 }
 
@@ -413,6 +404,7 @@ export async function getMatchDetails(
     id: string,
     token: string | null
 ) {
+    if(!token || !id || id === 'undefined') return null;
     return fetch(endpoints.matchDetails.replace(':id', id), {
         method: 'GET',
         headers: {
@@ -421,7 +413,7 @@ export async function getMatchDetails(
         }
     })
         .then(response => {
-            return response.json()
+            return response.json();
         }
         )
         .catch(error => {
@@ -434,28 +426,28 @@ export async function deleteMatch(
     id: string,
     token: string | null
 ) {
-    fetch(endpoints.matchDetails.replace(':id', id), {
+    return fetch(endpoints.matchDetails.replace(':id', id), {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': "Token " + (token || '')
         }
     })
-        .then(response => response.json())
-        .then(
-            (data) => {
-                return data;
-            }
-        )
+        .then(response => { return response; })
         .catch(error => {
             console.log("Error while deleting match: ", error);
+            return error;
         });
 }
 
 export async function getMatches(
-    token: string | null
+    token: string | null,
+    leagueId: string
 ) {
-    return fetch(endpoints.matches, {
+    let url = new URL(endpoints.matches);
+    url.searchParams.append('page_size', '100');
+    url.searchParams.append('league',  leagueId);
+    return fetch(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -483,7 +475,7 @@ export async function createMatch(
     token: string | null,
     leagueId: string
 ) {
-    const body_stringify = JSON.stringify({
+    console.log({
         league: leagueId,
         host: body.host,
         host_score: 0,
@@ -492,28 +484,32 @@ export async function createMatch(
         datetime: body.datetime,
         address: body.address,
         city: body.city
-    });
-    fetch(endpoints.matches, {
+    })
+    return fetch(endpoints.matches, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': "Token " + (token || '')
         },
-        body: body_stringify
-    })
-        .then(response => {
-            if(response.ok) {
-                return response.json();
-            }
-            throw new Error('LoginView failed');
-        })
-        .then(
-            (data) => {
-                return data;
+        body: JSON.stringify(
+            {
+               league: leagueId,
+                host: body.host,
+                host_score: 0,
+                visitor: body.visitor,
+                visitor_score: 0,
+                datetime: body.datetime,
+                address: body.address,
+                city: body.city
             }
         )
+    })
+        .then(response => {
+            return response;
+        })
         .catch(error => {
             console.log("Error while creating match: ", error);
+            return error;
         });
 }
 

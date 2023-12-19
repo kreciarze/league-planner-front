@@ -2,7 +2,7 @@ import {League, Match, Team} from "@/types/types";
 import {useRouter} from "next/router";
 import useToken from "@/hooks/useToken";
 import {useState} from "react";
-import {updateLeague, updateTeam} from "@/endpoints";
+import {deleteLeague, deleteMatch, deleteTeam, updateLeague, updateTeam} from "@/endpoints";
 
 function Card(
     props: {
@@ -48,9 +48,11 @@ function LeagueCardBody(
         <div className="card-body">
             {!editing && (
                 <>
-                    <h2 className="card-title">{newItem.name}</h2>
+                    <div>
+                        <h2 className="card-title">{newItem.name}</h2>
+                    </div>
                     <p className={"text-gray-400"}>
-                        Właściciel: {item.owner_login === username.current ? "Ty" : newItem.owner_login}
+                    Właściciel: {item.owner_login === username.current ? "Ty" : newItem.owner_login}
                     </p>
 
                     <div className="card-actions justify-end">
@@ -59,6 +61,10 @@ function LeagueCardBody(
                                 setEditing(true);
                             }} className={"btn btn-primary"}>
                                 Edytuj
+                            </button>
+                            <button className={"btn btn-error"}
+                                    onClick={() => PromptForDeleteLeague(`${newItem.id}`, token.current)}>
+                                Usuń
                             </button>
                             <button className="btn btn-primary" onClick={() => {
                                 router.push(`/leagueView/${newItem.id}`)
@@ -114,7 +120,7 @@ function TeamCardBody(
                 <>
                     <h2 className="card-title">{newItem.name}</h2>
                     <p className={"text-gray-400"}>
-                        Drużyna {newItem.name}
+                        Drużyna z {newItem.city}
                     </p>
                     <div className="card-actions justify-end">
                         <button onClick={() => {
@@ -122,6 +128,10 @@ function TeamCardBody(
                         }
                         } className={"btn btn-primary"}>
                             Edytuj
+                        </button>
+                        <button className={"btn btn-error"}
+                                onClick={() => PromptForDeleteTeam(`${newItem.id}`, token.current)}>
+                            Usuń
                         </button>
                         <button className="btn btn-primary" onClick={() => {
                             router.push(`/leagueView/${newItem.id}`)
@@ -166,14 +176,15 @@ function MatchCardBody(
     }
 ) {
     const {item} = props;
+    console.log({item})
     const router = useRouter();
+    const {token, username} = useToken();
     return (
         <div className="card-body">
             <h2 className="card-title">{item.host} - {item.visitor}</h2>
-            <p className={"text-gray-400"}>
-                {item.host} - {item.visitor}
-            </p>
-
+            <button className={"btn btn-error"} onClick={() => PromptForDeleteMatch(`${item.id}`, token.current)}>
+                Usuń
+            </button>
             <div className="card-actions justify-end">
                 <button className="btn btn-primary" onClick={() => {
                     router.push(`/leagueView/${router.query.id}/matchView/edit/${item.id}`)
@@ -187,3 +198,34 @@ function MatchCardBody(
         </div>
     )
 }
+
+function PromptForDeleteLeague(id: string, token: string | null) {
+    if (confirm("Czy na pewno chcesz usunąć ligę?")) {
+        deleteLeague(id, token).then((response) => {
+            if(response.ok)
+                window.location.reload();
+            }
+        );
+    }
+}
+
+function PromptForDeleteTeam(id: string, token: string | null) {
+    if (confirm("Czy na pewno chcesz usunąć drużynę?")) {
+        deleteTeam(id, token).then((response) => {
+            if(response.ok)
+                window.location.reload();
+            }
+        );
+    }
+}
+
+function PromptForDeleteMatch(id: string, token: string | null) {
+    if (confirm("Czy na pewno chcesz usunąć mecz?")) {
+        deleteMatch(id, token).then((response) => {
+                if(response.ok)
+                    window.location.reload();
+            }
+        );
+    }
+}
+

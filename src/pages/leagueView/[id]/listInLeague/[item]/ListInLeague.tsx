@@ -1,10 +1,11 @@
+import '@/styles/globals.css';
 import useToken from "@/hooks/useToken";
 import {useEffect, useState} from "react";
 import {League} from "@/types/types";
-import {getLeagues, getMatches, getTeams} from "@/endpoints";
+import {getMatches, getTeams} from "@/endpoints";
 import {useRouter} from "next/router";
 import Navbar from "@/components/navbar";
-import {leagueNavigation, teamNavigation} from "@/components/navbar/navigationObjects";
+import {teamNavigation} from "@/components/navbar/navigationObjects";
 import CardsList from "@/components/cardsList/CardsList";
 import Footer from "@/components/footer/Footer";
 
