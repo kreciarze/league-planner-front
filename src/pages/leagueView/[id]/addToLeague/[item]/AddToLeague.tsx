@@ -75,7 +75,16 @@ function TeamInputBody(
                     city: e
                 }
             })
-        }} label={"Miasto"} value={inputObject.city} required={true} />
+        }} label={"Miasto"} value={inputObject.city} required={false} />
+        <InputField type={"number"} placeholder={"Numer druzyny"} onChange={(e: string) => {
+            setInputObject((prev: Team) => {
+                return {
+                    ...prev,
+                    number: e
+                }
+            })
+        }
+        } label={"Numer druzyny"} value={inputObject.number} required={true} />
         <div className="form-control">
             <label className="label">
                 <span className="label-text">Opis drużyny</span>
@@ -138,7 +147,7 @@ function MatchInputBody(
                     }
                 })
             }}/>
-            <SelectInput title={"Gość"} items={options} setInputObject={(e: string) => {
+            <SelectInput title={"Gość"} items={options} setInputObject={(e: Team) => {
                 setInputObject((prev: Match) => {
                     return {
                         ...prev,
@@ -147,7 +156,7 @@ function MatchInputBody(
                 })
             }
             }/>
-            <InputField type={"text"} placeholder={"Adres"} onChange={(e: string) => {
+            <InputField type={"text"} placeholder={"Adres"} onChange={(e: Team) => {
                 setInputObject((prev: Match) => {
                     return {
                         ...prev,

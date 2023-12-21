@@ -147,9 +147,6 @@ export async function createLeague(
     body: League,
     token: string | null
 ) {
-    console.log({
-        name: body.name
-    })
     const body_stringify = JSON.stringify({
         name: body.name
     });
@@ -348,20 +345,18 @@ export async function createTeam(
     token: string | null,
     leagueId: string
 ) {
-    const body_stringify = JSON.stringify(
-        {
-            name: body.name,
-            league: leagueId
-        }
-    );
-    console.log(body);
     return fetch(endpoints.teams, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': "Token " + (token || '')
         },
-        body: body_stringify
+        body: JSON.stringify(
+            {
+                ...body,
+                league: leagueId
+            }
+        )
     })
         .then(response => {
             return response;
@@ -444,6 +439,7 @@ export async function getMatches(
     token: string | null,
     leagueId: string
 ) {
+    if(!token || !leagueId || leagueId === 'undefined') return null;
     let url = new URL(endpoints.matches);
     url.searchParams.append('page_size', '100');
     url.searchParams.append('league',  leagueId);
@@ -462,6 +458,9 @@ export async function getMatches(
         })
         .then(
             (data) => {
+                console.log({
+                    data: data
+                })
                 return data;
             }
         )

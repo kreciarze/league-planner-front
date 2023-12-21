@@ -7,6 +7,7 @@ export type League = {
 
 export type Team = {
     id: number,
+    number: number,
     name: string,
     league: number,
     owner: string,
@@ -16,9 +17,9 @@ export type Team = {
 export type Match = {
     id: number,
     league: number,
-    host: number,
+    host: Team,
     host_score: number,
-    visitor: number,
+    visitor: Team,
     visitor_score: number,
     datetime: string
     address: string

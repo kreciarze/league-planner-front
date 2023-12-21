@@ -21,7 +21,6 @@ function EditMatch() {
 
     useEffect(() => {
         getMatchDetails(matchId, token.current).then((data: Match) => {
-            console.log(data);
             setHostScore((prev) => {
                 if(data === null) return 0;
                 prev = data.host_score;

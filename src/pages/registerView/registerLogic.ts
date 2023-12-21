@@ -1,17 +1,20 @@
 import { registerUser } from "@/endpoints";
 import { FormEvent } from "react";
 import { FailSettersType, RegisterData } from "@/types/types";
+import {NextRouter, useRouter} from "next/router";
 
 
-export default function submitRegisterData(e: FormEvent<HTMLFormElement>, failSetters: FailSettersType) {
+export default function submitRegisterData(e: FormEvent<HTMLFormElement>, failSetters: FailSettersType, router: NextRouter) {
+    e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData) as RegisterData;
     const isDataValid = validateRegisterData(data, failSetters);
     if(!isDataValid)
         return;
     registerUser(data, failSetters).then((response) => {
-        if(response.ok === 200) {
-            window.location.href = '/loginView';
+        console.log(response)
+        if(response.ok) {
+            router.push('/loginView');
         }
     });
 }

@@ -1,6 +1,5 @@
 import {League, Match, Team} from "@/types/types";
 import {useRouter} from "next/router";
-import useToken from "@/hooks/useToken";
 import {useState} from "react";
 import {deleteLeague, deleteMatch, deleteTeam, updateLeague, updateTeam} from "@/endpoints";
 
@@ -9,10 +8,12 @@ function Card(
         itemLeague?: League,
         itemTeam?: Team,
         itemMatch?: Match,
-        type: string
+        type: string,
+        token: string,
+        username: string
     }
 ) {
-    const { itemLeague, itemMatch, itemTeam, type} = props;
+    const { itemLeague, itemMatch, itemTeam, type, username, token} = props;
 
     //TODO: Trzeba zrobić style tak, żeby karty zajmowały więcej miejsca, bo w tle jest za dużo białego który bije po oczach, plus są nieresponsywne
     return (
@@ -20,13 +21,13 @@ function Card(
             <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes"/>
             </figure>
             {
-                type === "league" && <LeagueCardBody item={itemLeague as League}/>
+                type === "league" && <LeagueCardBody item={itemLeague as League} token={token} username={username}/>
             }
             {
-                type === "team" && <TeamCardBody item={itemTeam as Team}/>
+                type === "team" && <TeamCardBody item={itemTeam as Team} token={token} username={username}/>
             }
             {
-                type === "match" && <MatchCardBody item={itemMatch as Match}/>
+                type === "match" && <MatchCardBody item={itemMatch as Match} token={token} username={username}/>
             }
         </div>
     )
@@ -36,14 +37,16 @@ export default Card;
 
 function LeagueCardBody(
     props: {
-        item: League
+        item: League,
+        token: string,
+        username: string
     }
 ) {
-    const {item} = props;
+    const {item, token, username} = props;
     const router = useRouter();
-    const {token, username} = useToken();
     const [editing, setEditing] = useState(false);
     const [newItem, setNewItem] = useState<League>(item);
+
     return (
         <div className="card-body">
             {!editing && (
@@ -52,18 +55,18 @@ function LeagueCardBody(
                         <h2 className="card-title">{newItem.name}</h2>
                     </div>
                     <p className={"text-gray-400"}>
-                    Właściciel: {item.owner_login === username.current ? "Ty" : newItem.owner_login}
+                    Właściciel: {item.owner_login === username ? "Ty" : item.owner_login}
                     </p>
 
                     <div className="card-actions justify-end">
-                        {username.current === item.owner_login &&(<>
+                        {username === item.owner_login &&(<>
                             <button onClick={() => {
                                 setEditing(true);
                             }} className={"btn btn-primary"}>
                                 Edytuj
                             </button>
                             <button className={"btn btn-error"}
-                                    onClick={() => PromptForDeleteLeague(`${newItem.id}`, token.current)}>
+                                    onClick={() => PromptForDeleteLeague(`${newItem.id}`, token)}>
                                 Usuń
                             </button>
                             <button className="btn btn-primary" onClick={() => {
@@ -90,7 +93,7 @@ function LeagueCardBody(
                     }/>
                     <div className="card-actions justify-end">
                         <button className="btn btn-primary" onClick={() => {
-                            updateLeague(newItem, token.current).then(() => {
+                            updateLeague(newItem, token).then(() => {
                                 setEditing(false);
                             }
                             );
@@ -106,12 +109,13 @@ function LeagueCardBody(
 
 function TeamCardBody(
     props: {
-        item: Team
+        item: Team,
+        token: string,
+        username: string
     }
 ) {
-    const {item} = props;
+    const {item, token, username} = props;
     const router = useRouter();
-    const {token, username} = useToken();
     const [editing, setEditing] = useState(false);
     const [newItem, setNewItem] = useState<Team>(item);
     return (
@@ -119,18 +123,18 @@ function TeamCardBody(
             {!editing && (
                 <>
                     <h2 className="card-title">{newItem.name}</h2>
-                    <p className={"text-gray-400"}>
+                    <p className={newItem.city === "Not set" ? "opacity-0" : "text-gray-400"}>
                         Drużyna z {newItem.city}
                     </p>
                     <div className="card-actions justify-end">
-                        <button onClick={() => {
+                    <button onClick={() => {
                             setEditing(true);
                         }
                         } className={"btn btn-primary"}>
                             Edytuj
                         </button>
                         <button className={"btn btn-error"}
-                                onClick={() => PromptForDeleteTeam(`${newItem.id}`, token.current)}>
+                                onClick={() => PromptForDeleteTeam(`${newItem.id}`, token)}>
                             Usuń
                         </button>
                         <button className="btn btn-primary" onClick={() => {
@@ -156,7 +160,7 @@ function TeamCardBody(
                     }/>
                     <div className="card-actions justify-end">
                         <button className="btn btn-primary" onClick={() => {
-                            updateTeam(newItem, token.current).then(() => {
+                            updateTeam(newItem, token).then(() => {
                                 setEditing(false);
                             }
                             );
@@ -172,17 +176,20 @@ function TeamCardBody(
 
 function MatchCardBody(
     props: {
-        item: Match
+        item: Match,
+        token: string,
+        username: string
     }
 ) {
-    const {item} = props;
-    console.log({item})
+    const {item, token, username} = props;
     const router = useRouter();
-    const {token, username} = useToken();
     return (
         <div className="card-body">
-            <h2 className="card-title">{item.host} - {item.visitor}</h2>
-            <button className={"btn btn-error"} onClick={() => PromptForDeleteMatch(`${item.id}`, token.current)}>
+            <h2 className="card-title">{item.host.name} vs. {item.visitor.name}</h2>
+            <p className={"text-gray-400"}>
+                {item.datetime ? item.datetime : "Nie ustawiono daty"}
+            </p>
+            <button className={"btn btn-error"} onClick={() => PromptForDeleteMatch(`${item.id}`, token)}>
                 Usuń
             </button>
             <div className="card-actions justify-end">

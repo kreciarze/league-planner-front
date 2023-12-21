@@ -21,8 +21,9 @@ function ListInLeague() {
 
     useEffect(() => {
         getItems(token.current, leagueId).then((items) => {
-            setItemsList(items.results);
-            setSearchResults(items.results);
+            const results = items ? items.results as League[] : [];
+            setItemsList(results);
+            setSearchResults(results);
         });
     }, [token, leagueId, getItems]);
 

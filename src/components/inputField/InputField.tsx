@@ -7,7 +7,7 @@ function InputField(
         onChange: Function,
         required: boolean,
         label: string,
-        value?: string
+        value?: string | number
     }
 ) {
     const {type, placeholder, onChange, required, label, value } = props;
@@ -20,7 +20,6 @@ function InputField(
             <input type={type} placeholder={placeholder} className="input input-bordered" required={required}
                    onChange={
                        (e) => {
-                           console.log(e.target.value)
                            onChange(e.target.value);
                        }
                    } value={value ?? ""}/>

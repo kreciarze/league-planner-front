@@ -3,8 +3,10 @@ import Link from "next/link";
 import styleSheet from "@/styles/styleStrings";
 import submitRegisterData from "./registerLogic";
 import "@/styles/globals.css";
+import {useRouter} from "next/router";
 
 function RegisterView() {
+    const router = useRouter();
     const [failedRegister, setFailedRegister] = useState(false);
     const [isPasswordShort, setIsPasswordShort] = useState(false);
     const [isPasswordNotMatching, setIsPasswordNotMatching] = useState(false);
@@ -21,7 +23,7 @@ function RegisterView() {
             <h1 className="font-bold text-3xl sm:text-4xl">
                 Register
             </h1>
-            <form onSubmit={(e) => submitRegisterData(e, failSetters)}
+            <form onSubmit={(e) => submitRegisterData(e, failSetters, router)}
                   className="flex flex-col bg-gray-700 rounded p-12 mt-6">
                 <label>
                     <p className={failedRegister ? "opacity-100 text-red-600 text-lg mb-6 flex justify-center" : "opacity-0"}>
