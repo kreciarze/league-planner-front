@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import {useEffect, useRef, useState} from 'react'
 import { Disclosure } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import Image from "next/image";
 import {useRouter} from "next/router";
+import Breadcrumbs from "@/components/breadcrumbs";
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
@@ -20,13 +21,23 @@ export default function Navbar(
     const { getCurrentPage, navigation} = props;
     const [currentPage, setCurrentPage] = useState(getCurrentPage || 'Strona główna');
     const router = useRouter();
+    let path = useRef<string>();
+
+    useEffect(() => {
+        console.log("useeffect")
+        if(router.isReady){
+            path.current = router.asPath;
+        } else {
+            path.current = "";
+        }
+    }, [router.isReady, router.asPath])
 
     return (
-        <Disclosure as="nav" className="bg-gray-800">
+        <Disclosure as="nav" className="bg-gray-800 flex items-center justify-evenly">
             {({ open }) => (
                 <>
                     <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-                        <div className="relative flex h-16 items-center justify-between">
+                        <div className="relative flex pt-2 items-center justify-between">
                             <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                                 {/* Mobile menu button*/}
                                 <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
@@ -71,8 +82,9 @@ export default function Navbar(
                                 </div>
                             </div>
                         </div>
+                        <Breadcrumbs path={path.current} />
                     </div>
-
+                        {/* Mobile menu, show/hide based on menu state. */}
                     <Disclosure.Panel className="sm:hidden">
                         <div className="space-y-1 px-2 pb-3 pt-2">
                             {navigation.map((item) => (

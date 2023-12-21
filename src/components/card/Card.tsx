@@ -185,7 +185,7 @@ function MatchCardBody(
     const router = useRouter();
     return (
         <div className="card-body">
-            <h2 className="card-title">{item.host.name} vs. {item.visitor.name}</h2>
+            <h2 className="card-title">{item.host?.name} vs. {item.visitor?.name}</h2>
             <p className={"text-gray-400"}>
                 {item.datetime ? item.datetime : "Nie ustawiono daty"}
             </p>

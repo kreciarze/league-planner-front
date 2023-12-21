@@ -40,3 +40,7 @@ export type FailSettersType = {
     setIsEmailInvalid: (value: boolean) => void;
 }
 
+export type breadcrumbItem = {
+    name: string,
+    href: string
+}
