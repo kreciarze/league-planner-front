@@ -1,5 +1,5 @@
-import { MapBreadcrumbs} from "@/components/navbar/navigationObjects";
-import {breadcrumbItem} from "@/types/types";
+import { MapBreadcrumbs } from "@/components/breadcrumbs/mapBreadcrumbs";
+import { breadcrumbItem } from "@/types/types";
 
 
 function Breadcrumbs(

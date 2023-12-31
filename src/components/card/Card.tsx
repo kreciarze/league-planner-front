@@ -1,19 +1,22 @@
-import {League, Match, Team} from "@/types/types";
-import {useRouter} from "next/router";
-import {useState} from "react";
-import {deleteLeague, deleteMatch, deleteTeam, updateLeague, updateTeam} from "@/endpoints";
+import { League, Match, Season, Team } from "@/types/types";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { updateLeague, updateTeam } from "@/endpoints";
+import { PromptForDeleteLeague, PromptForDeleteSeason, PromptForDeleteTeam, PromptForDeleteMatch
+} from "@/components/card/deletePrompts";
 
 function Card(
     props: {
         itemLeague?: League,
         itemTeam?: Team,
         itemMatch?: Match,
+        itemSeason?: Season,
         type: string,
         token: string,
         username: string
     }
 ) {
-    const { itemLeague, itemMatch, itemTeam, type, username, token} = props;
+    const { itemLeague, itemMatch, itemTeam, itemSeason, type, username, token} = props;
 
     //TODO: Trzeba zrobić style tak, żeby karty zajmowały więcej miejsca, bo w tle jest za dużo białego który bije po oczach, plus są nieresponsywne
     return (
@@ -28,6 +31,9 @@ function Card(
             }
             {
                 type === "match" && <MatchCardBody item={itemMatch as Match} token={token} username={username}/>
+            }
+            {
+                type === "season" && <SeasonCardBody item={itemSeason as Season} token={token} username={username}/>
             }
         </div>
     )
@@ -70,7 +76,7 @@ function LeagueCardBody(
                                 Usuń
                             </button>
                             <button className="btn btn-primary" onClick={() => {
-                                router.push(`/leagueView/${newItem.id}`)
+                                router.push(`/leagueView/${newItem.id}/listInLeague/season`)
                             }}>
                                 Przejdź do widoku ligi
                             </button>
@@ -123,11 +129,12 @@ function TeamCardBody(
             {!editing && (
                 <>
                     <h2 className="card-title">{newItem.name}</h2>
+                    <h3 className="card-title">Sezon: {item.season}</h3>
                     <p className={newItem.city === "Not set" ? "opacity-0" : "text-gray-400"}>
                         Drużyna z {newItem.city}
                     </p>
                     <div className="card-actions justify-end">
-                    <button onClick={() => {
+                        <button onClick={() => {
                             setEditing(true);
                         }
                         } className={"btn btn-primary"}>
@@ -137,11 +144,11 @@ function TeamCardBody(
                                 onClick={() => PromptForDeleteTeam(`${newItem.id}`, token)}>
                             Usuń
                         </button>
-                        <button className="btn btn-primary" onClick={() => {
-                            router.push(`/leagueView/${newItem.id}`)
-                        }}>
-                            Przejdź do widoku drużyny
-                        </button>
+                        {/*<button className="btn btn-primary" onClick={() => {*/}
+                        {/*    router.push(`/leagueView/${newItem.league}/listInLeague/team/${newItem.id}`)*/}
+                        {/*}}>*/}
+                        {/*    Przejdź do widoku drużyny*/}
+                        {/*</button>*/}
                     </div>
                 </>
             )}
@@ -186,9 +193,13 @@ function MatchCardBody(
     return (
         <div className="card-body">
             <h2 className="card-title">{item.host?.name} vs. {item.visitor?.name}</h2>
+            <h3 className="card-title">Sezon: {item.season}</h3>
             <p className={"text-gray-400"}>
                 {item.datetime ? item.datetime : "Nie ustawiono daty"}
             </p>
+            <div>
+                Wynik: {item.host_score ?? 0} : {item.visitor_score ?? 0}
+            </div>
             <button className={"btn btn-error"} onClick={() => PromptForDeleteMatch(`${item.id}`, token)}>
                 Usuń
             </button>
@@ -198,41 +209,32 @@ function MatchCardBody(
                 }}>
                     Edytuj
                 </button>
-                <button className="btn btn-primary">
-                    Przejdź do widoku meczu
-                </button>
             </div>
         </div>
     )
 }
 
-function PromptForDeleteLeague(id: string, token: string | null) {
-    if (confirm("Czy na pewno chcesz usunąć ligę?")) {
-        deleteLeague(id, token).then((response) => {
-            if(response.ok)
-                window.location.reload();
-            }
-        );
+function SeasonCardBody(
+    props: {
+        item: Season,
+        token: string,
+        username: string
     }
-}
-
-function PromptForDeleteTeam(id: string, token: string | null) {
-    if (confirm("Czy na pewno chcesz usunąć drużynę?")) {
-        deleteTeam(id, token).then((response) => {
-            if(response.ok)
-                window.location.reload();
-            }
-        );
-    }
-}
-
-function PromptForDeleteMatch(id: string, token: string | null) {
-    if (confirm("Czy na pewno chcesz usunąć mecz?")) {
-        deleteMatch(id, token).then((response) => {
-                if(response.ok)
-                    window.location.reload();
-            }
-        );
-    }
+) {
+    const {item, token, username} = props;
+    const router = useRouter();
+    return (
+        <div className="card-body">
+            <h2 className="card-title">{item.name}</h2>
+            <p className={"text-gray-400"}>
+                {item.start_date} - {item.end_date}
+            </p>
+            <button className={"btn btn-error"} onClick={() => PromptForDeleteSeason(item.id, token)}>
+                Usuń
+            </button>
+            <div className="card-actions justify-end">
+            </div>
+        </div>
+    )
 }
 

@@ -2,7 +2,7 @@ import '@/styles/globals.css';
 import useToken from "@/hooks/useToken";
 import {useEffect, useState} from "react";
 import {League} from "@/types/types";
-import {getMatches, getTeams} from "@/endpoints";
+import {getMatches, getSeasons, getTeams} from "@/endpoints";
 import {useRouter} from "next/router";
 import Navbar from "@/components/navbar";
 import {teamNavigation} from "@/components/navbar/navigationObjects";
@@ -16,8 +16,8 @@ function ListInLeague() {
     const {token} = useToken();
     const [itemsList, setItemsList] = useState<League[]>([]);
     const [searchResults, setSearchResults] = useState<League[]>([]);
-    const getItems = itemName === "team" ? getTeams : getMatches;
-    const cardsType = itemName === "team" ? "team" : "match";
+    const getItems = itemName === "team" ? getTeams : (itemName === "match" ? getMatches : getSeasons);
+    const cardsType = itemName === "team" ? "team" : (itemName === "match" ? "match" : "season");
 
     useEffect(() => {
         getItems(token.current, leagueId).then((items) => {

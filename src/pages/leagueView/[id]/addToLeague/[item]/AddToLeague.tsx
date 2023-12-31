@@ -4,8 +4,8 @@ import Navbar from "@/components/navbar";
 import useToken from "@/hooks/useToken";
 import {teamNavigation} from "@/components/navbar/navigationObjects";
 import Footer from "@/components/footer/Footer";
-import {Match, Team} from "@/types/types";
-import {createMatch, createTeam, getTeams} from "@/endpoints";
+import {Match, Season, Team} from "@/types/types";
+import {createMatch, createSeason, createTeam, getSeasons, getTeams} from "@/endpoints";
 import {useEffect, useState} from "react";
 import InputField from "@/components/inputField";
 import SelectInput from "@/components/selectInput";
@@ -16,7 +16,7 @@ function AddToLeague() {
     const router = useRouter();
     const leagueId = router.query.id as string;
     const itemName = router.query.item;
-    const [inputObject, setInputObject] = useState<Team & Match>({} as Team & Match);
+    const [inputObject, setInputObject] = useState<Team & Match & Season>({} as Team & Match & Season);
 
     const [failed, setFailed] = useState(false);
     return (
@@ -27,13 +27,18 @@ function AddToLeague() {
                     <div className="card-body">
                         {
                             itemName === "match" &&
-                            <MatchInputBody inputObject={inputObject} setInputObject={setInputObject}
-                                            leagueId={leagueId} setFailed={setFailed}/>
+                            <MatchInputBody inputObject={inputObject} setInputObject={setInputObject} leagueId={leagueId}
+                                            setFailed={setFailed}/>
                         }
                         {
                             itemName === "team" &&
                             <TeamInputBody inputObject={inputObject} setInputObject={setInputObject} leagueId={leagueId}
                                            setFailed={setFailed}/>
+                        }
+                        {
+                            itemName === "season" &&
+                            <SeasonInputBody inputObject={inputObject} setInputObject={setInputObject} leagueId={leagueId}
+                                             setFailed={setFailed}/>
                         }
                         {
                             failed && <p className={"text-red-500"}>Wypełnij wszystkie pola</p>
@@ -59,6 +64,17 @@ function TeamInputBody(
     const {setInputObject, inputObject, leagueId, setFailed} = props;
     const {token} = useToken();
     const router = useRouter();
+    const [seasonOptions, setSeasonOptions] = useState<optionObject[]>([] as optionObject[]);
+    useEffect(() => {
+        getSeasons(token.current, leagueId).then((seasons) => {
+            setSeasonOptions(seasons?.results.map((season: Season) => {
+                return {
+                    value: season.id,
+                    label: season.name
+                }
+            }));
+        });
+    }, [token, leagueId]);
     return (<>
         <InputField type={"text"} placeholder={"Nazwa drużyny"} onChange={(e: string) => {
             setInputObject((prev: Team) => {
@@ -68,6 +84,14 @@ function TeamInputBody(
                 }
             })
         }} label={"Nazwa drużyny"} value={inputObject.name} required={true} />
+        <SelectInput title={"Sezon"}  items={seasonOptions} setInputObject={(e: string) => {
+            setInputObject((prev: Team) => {
+                return {
+                    ...prev,
+                    season: e
+                }
+            })
+        }}/>
         <InputField type={"text"} placeholder={"Miasto"} onChange={(e: string) => {
             setInputObject((prev: Team) => {
                 return {
@@ -116,13 +140,22 @@ function MatchInputBody(
     const {setInputObject, inputObject, leagueId, setFailed} = props;
     const {token} = useToken();
     const router = useRouter();
-    const [options, setOptions] = useState<optionObject[]>([] as optionObject[]);
+    const [teamOptions, setTeamOptions] = useState<optionObject[]>([] as optionObject[]);
+    const [seasonOptions, setSeasonOptions] = useState<optionObject[]>([] as optionObject[]);
     useEffect(() => {
         getTeams(token.current, leagueId).then((teams) => {
-            setOptions(teams?.results.map((team: Team) => {
+            setTeamOptions(teams?.results.map((team: Team) => {
                 return {
                     value: team.id,
                     label: team.name
+                }
+            }));
+        });
+        getSeasons(token.current, leagueId).then((seasons) => {
+            setSeasonOptions(seasons?.results.map((season: Season) => {
+                return {
+                    value: season.id,
+                    label: season.name
                 }
             }));
         });
@@ -139,7 +172,7 @@ function MatchInputBody(
                 })
             }
             } label={"Data meczu"} value={inputObject.datetime} required={true} />
-            <SelectInput title={"Gospodarz"} items={options} setInputObject={(e: string) => {
+            <SelectInput title={"Gospodarz"} items={teamOptions} setInputObject={(e: string) => {
                 setInputObject((prev: Match) => {
                     return {
                         ...prev,
@@ -147,7 +180,7 @@ function MatchInputBody(
                     }
                 })
             }}/>
-            <SelectInput title={"Gość"} items={options} setInputObject={(e: Team) => {
+            <SelectInput title={"Gość"} items={teamOptions} setInputObject={(e: Team) => {
                 setInputObject((prev: Match) => {
                     return {
                         ...prev,
@@ -173,6 +206,15 @@ function MatchInputBody(
                 })
             }
             } label={"Miasto"} value={inputObject.city} required={true} />
+            <SelectInput title={"Sezon"} items={seasonOptions} setInputObject={(e: string) => {
+                setInputObject((prev: Match) => {
+                    return {
+                        ...prev,
+                        season: e
+                    }
+                })
+            }
+            }/>
             <div className="form-control mt-6">
                 <button className="btn btn-primary" onClick={
                     () => {
@@ -198,4 +240,96 @@ function MatchInputBody(
             </div>
         </>
     )
+}
+
+function SeasonInputBody(
+    props: {
+        setInputObject: Function
+        inputObject: Season
+        leagueId: string
+        setFailed: Function
+    }
+){
+    const {setInputObject, inputObject, leagueId, setFailed} = props;
+    const {token} = useToken();
+    const router = useRouter();
+
+    return (<>
+        <InputField type={"text"} placeholder={"Nazwa sezonu"} onChange={(e: string) => {
+            setInputObject((prev: Team) => {
+                return {
+                    ...prev,
+                    name: e
+                }
+            })
+        }} label={"Nazwa sezonu"} value={inputObject.name} required={true} />
+        <InputField type={"datetime-local"} placeholder={"Data rozpoczęcia"} onChange={(e: string) => {
+            setInputObject((prev: Team) => {
+                return {
+                    ...prev,
+                    start_date: e
+                }
+            })
+        }} label={"Data rozpoczęcia"} value={inputObject.start_date} required={true} />
+        <InputField type={"datetime-local"} placeholder={"Data zakończenia"} onChange={(e: string) => {
+            setInputObject((prev: Team) => {
+                return {
+                    ...prev,
+                    end_date: e
+                }
+            })
+        }} label={"Data zakończenia"} value={inputObject.end_date} required={true} />
+        <InputField type={"number"} placeholder={"points per win"} onChange={(e: string) => {
+            setInputObject((prev: Team) => {
+                return {
+                    ...prev,
+                    points_per_win: e
+                }
+            })
+        }}
+        label={"points per win"} value={inputObject.points_per_win} required={true} />
+        <InputField type={"number"} placeholder={"points per draw"} onChange={(e: string) => {
+            setInputObject((prev: Team) => {
+                return {
+                    ...prev,
+                    points_per_draw: e
+                }
+            })
+        }}
+        label={"points per draw"} value={inputObject.points_per_draw} required={true} />
+        <InputField type={"number"} placeholder={"points per lose"} onChange={(e: string) => {
+            setInputObject((prev: Team) => {
+                return {
+                    ...prev,
+                    points_per_lose: e
+                }
+            })
+        }}
+        label={"points per lose"} value={inputObject.points_per_lose} required={true} />
+        <div className="form-control mt-6">
+            <button className="btn btn-primary" onClick={() => {
+                if(
+                    inputObject.name === undefined ||
+                    inputObject.start_date === undefined ||
+                    inputObject.end_date === undefined
+                ) {
+                    setFailed(true);
+                    return;
+                }
+                setInputObject((prev: Season) => {
+                    return {
+                        ...prev,
+                        league: leagueId
+                    }
+                });
+                createSeason(inputObject, token.current).then((response)=>{
+                    if(response.ok)
+                        router.push(`/leagueView/${leagueId}`)
+                    else
+                        setFailed(true);
+                })
+            }}
+            >Dodaj</button>
+        </div>
+    </>)
 }

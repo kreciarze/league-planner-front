@@ -1,9 +1,9 @@
-import {League, Match, Team} from "@/types/types";
+import {League, Match, Season, Team} from "@/types/types";
 import {useEffect, useState} from "react";
 
 function SearchBar(
     props: {
-        list: League[] | Team[] | Match[],
+        list: League[] | Team[] | Match[] | Season[],
         setSearchResults: Function,
         cardsType: string
     }
@@ -48,6 +48,16 @@ function SearchBar(
                 });
                 setSearchResults(matchResults);
                 break;
+            case "season":
+                // let seasonResults = list as Season[];
+                // seasonResults = seasonResults.filter((season) => {
+                //     return season.name.toLowerCase().includes(searchQuery.toLowerCase());
+                // });
+                // seasonResults = seasonResults.sort((a, b) => {
+                //     return a.name.localeCompare(b.name);
+                // });
+                // setSearchResults(seasonResults);
+                // break;
         }
     }, [list, searchQuery, setSearchResults]);
 

@@ -72,7 +72,9 @@ export default function Navbar(
                                                 aria-current={item.name === getCurrentPage ? 'page' : undefined}
                                                 onClick={() => {
                                                     setCurrentPage(item.name);
-                                                    router.push(item.href.includes('[id]') ? item.href.replace('[id]', router.query.id as string) : item.href);
+                                                    const replacedIdHref = item.href.includes('[id]') ? item.href.replace('[id]', router.query.id as string) : item.href;
+                                                    // console.log(replacedIdHref)
+                                                    router.push(replacedIdHref);
                                                 }}
                                             >
                                                 {item.name}

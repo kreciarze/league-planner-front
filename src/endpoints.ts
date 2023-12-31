@@ -1,18 +1,20 @@
 import {FormEvent} from "react";
-import {FailSettersType, League, Match, RegisterData, Team} from "@/types/types";
+import {FailSettersType, League, Match, RegisterData, Season, Team} from "@/types/types";
+import {json} from "node:stream/consumers";
 
 const url = 'http://localhost:8080/';
 
 const endpoints = {
     leagues: url + 'leagues/',
     leagueDetails: url + 'leagues/' + ":id",
-    leagueScoreboard: url + 'leagues/' + ":id" + '/scoreboard',
+    leagueScoreboard: url + 'seasons/' + ":id" + '/scoreboard/',
     teams: url + 'teams/',
     teamDetails: url + 'teams/' + ":id",
     matches: url + 'matches/',
     matchDetails: url + 'matches/' + ":id",
     login: url + 'login/',
     register: url + 'register/',
+    seasons: url + 'seasons/',
 }
 
 //TODO: przerzucić wszystkie linki aby korzystały z tego poniżej a nie stringów
@@ -31,11 +33,16 @@ export const hrefs = {
     listInTeam: '/listInTeam',
 }
 
-export function getScoreboard(
-    id: string,
+export async function getScoreboard(
+    seasonId: string,
     token: string | null
 ) {
-    fetch(endpoints.leagueScoreboard.replace(':id', id), {
+    if(!token || !seasonId || seasonId === 'undefined') return null;
+    const urlRep = `${endpoints.leagueScoreboard.replace(':id', seasonId)}`;
+    console.log({
+        seasonId: seasonId,
+    })
+    return fetch(urlRep, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -312,11 +319,10 @@ export async function deleteTeam(
 
 export async function getTeams(
     token: string | null,
-    leagueId: string
+    leagueId?: string,
+    seasonId?: string
 ) {
-    let url = new URL(endpoints.teams);
-    url.searchParams.append('league', leagueId);
-    url.searchParams.append('page_size', '100');
+    let url = getWithPagination(endpoints.teams, leagueId, 100, seasonId);
     return fetch(url, {
         method: 'GET',
         headers: {
@@ -373,16 +379,18 @@ export async function updateMatch(
     visitorScore: number,
     token: string | null
 ) {
-    fetch(endpoints.matchDetails.replace(':id', matchId), {
+    const urlRep = `${endpoints.matches}${matchId}/`;
+    const body_stringify = JSON.stringify({
+        host_score: hostScore,
+        visitor_score: visitorScore
+    });
+    return fetch(urlRep, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': "Token " + (token || '')
         },
-        body: JSON.stringify({
-            host_score: hostScore,
-            visitor_score: visitorScore
-        })
+        body: body_stringify
     })
         .then(response => response.json())
         .then(
@@ -437,12 +445,11 @@ export async function deleteMatch(
 
 export async function getMatches(
     token: string | null,
-    leagueId: string
+    leagueId: string,
+    seasonId: string
 ) {
     if(!token || !leagueId || leagueId === 'undefined') return null;
-    let url = new URL(endpoints.matches);
-    url.searchParams.append('page_size', '100');
-    url.searchParams.append('league',  leagueId);
+    let url = getWithPagination(endpoints.matches, leagueId, 100, seasonId);
     return fetch(url, {
         method: 'GET',
         headers: {
@@ -469,39 +476,52 @@ export async function getMatches(
         });
 }
 
+export async function getSeasons(
+    token: string | null,
+    leagueId: string
+) {
+    if(!token || !leagueId || leagueId === 'undefined') {
+        console.log("missing token or leagueId");
+        return null;
+    }
+    let url = getWithPagination(endpoints.seasons, leagueId);
+    return fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': "Token " + (token || '')
+        }
+    })
+        .then(response => {
+            if(response.ok) {
+                return response.json();
+            }
+            throw new Error('LoginView failed');
+        })
+        .then(
+            (data) => {
+                return data;
+            }
+        )
+        .catch(error => {
+            console.log("Error while getting Seasons: ", error);
+        });
+}
+
+
 export async function createMatch(
     body: Match,
     token: string | null,
     leagueId: string
 ) {
-    console.log({
-        league: leagueId,
-        host: body.host,
-        host_score: 0,
-        visitor: body.visitor,
-        visitor_score: 0,
-        datetime: body.datetime,
-        address: body.address,
-        city: body.city
-    })
+    const body_stringify = JSON.stringify(body);
     return fetch(endpoints.matches, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': "Token " + (token || '')
         },
-        body: JSON.stringify(
-            {
-               league: leagueId,
-                host: body.host,
-                host_score: 0,
-                visitor: body.visitor,
-                visitor_score: 0,
-                datetime: body.datetime,
-                address: body.address,
-                city: body.city
-            }
-        )
+        body: body_stringify
     })
         .then(response => {
             return response;
@@ -512,3 +532,103 @@ export async function createMatch(
         });
 }
 
+export async function createSeason(
+    season: Season,
+    token: string | null
+) {
+    console.log({
+        season: season
+    })
+    const body_stringify = JSON.stringify(season);
+    return fetch(endpoints.seasons, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': "Token " + (token || '')
+        },
+        body: body_stringify
+    })
+        .then(response => {
+            return response;
+        })
+        .catch(error => {
+            console.log("Error while creating season: ", error);
+            return error;
+        });
+}
+
+
+export async function getSeasonDetails(
+    leagueId: number,
+    seasonId: number,
+    token: string | null
+){
+    const urlRep = `${endpoints.seasons}${leagueId}/${seasonId}/`;
+    return fetch(urlRep, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': "Token " + (token || '')
+        }
+    })
+    .then((response) => {
+        return response;
+    })
+    .catch(error => {
+        console.log("Error while getting season details: ", error);
+        return error;
+    });
+}
+
+export async function destroySeason(
+    leagueId: number,
+    seasonId: number,
+    token: string | null
+){
+    const urlRep = `${endpoints.seasons}${leagueId}/${seasonId}/`;
+    return fetch(urlRep, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': "Token " + (token || '')
+        }
+    })
+    .then((response) => {
+        return response;
+    })
+    .catch(error => {
+        console.log("Error while destroying seasons: ", error);
+        return error;
+    });
+}
+
+export async function updateSeason(
+    season: Season,
+    token: string | null
+) {
+    const urlRep = `${endpoints.seasons}${season.league}/${season.id}/`;
+    const body_stringify = JSON.stringify(season);
+    return fetch(urlRep, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': "Token " + (token || '')
+        },
+        body: body_stringify
+    })
+    .then((response) => {
+        return response;
+    })
+    .catch(error => {
+        console.log("Error while updating seasons: ", error);
+        return error;
+    });
+}
+
+function getWithPagination(url: string, leagueId?:string, pageSize: number = 10, seasonId?: string){
+    let urlRep = new URL(url);
+    urlRep.searchParams.append('page_size', pageSize.toString());
+    if(seasonId) urlRep.searchParams.append('season', seasonId);
+    if(leagueId) urlRep.searchParams.append('league', leagueId);
+    return urlRep;
+}
