@@ -207,7 +207,7 @@ function MatchCardBody(
                 <button className="btn btn-primary" onClick={() => {
                     router.push(`/leagueView/${router.query.id}/matchView/edit/${item.id}`)
                 }}>
-                    Edytuj
+                    Edytuj wynik meczu
                 </button>
             </div>
         </div>
