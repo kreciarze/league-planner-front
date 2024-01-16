@@ -18,10 +18,14 @@ function ListInLeague() {
     const [searchResults, setSearchResults] = useState<League[]>([]);
     const getItems = itemName === "team" ? getTeams : (itemName === "match" ? getMatches : getSeasons);
     const cardsType = itemName === "team" ? "team" : (itemName === "match" ? "match" : "season");
+    const [seasonId, setSeasonId] = useState<string>("");
 
     useEffect(() => {
-        getItems(token.current, leagueId).then((items) => {
-            const results = items ? items.results as League[] : [];
+        getItems(token.current, leagueId, seasonId).then((items) => {
+            console.log({
+                items
+            })
+            const results = items;
             setItemsList(results);
             setSearchResults(results);
         });

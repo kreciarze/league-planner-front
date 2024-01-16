@@ -24,10 +24,10 @@ function SearchBar(
                 break;
             case "team":
                 let teamResults = list as Team[];
-                teamResults = teamResults.filter((team) => {
+                teamResults = teamResults?.filter((team) => {
                     return team.name?.toLowerCase().includes(searchQuery.toLowerCase());
                 });
-                teamResults = teamResults.sort((a, b) => {
+                teamResults = teamResults?.sort((a, b) => {
                     return a.name.localeCompare(b.name);
                 });
                 setSearchResults(teamResults);

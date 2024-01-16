@@ -129,7 +129,7 @@ function TeamCardBody(
             {!editing && (
                 <>
                     <h2 className="card-title">{newItem.name}</h2>
-                    <h3 className="card-title">Sezon: {item.season}</h3>
+                    <h3 className="card-title">Sezon: {item.season?.name}</h3>
                     <p className={newItem.city === "Not set" ? "opacity-0" : "text-gray-400"}>
                         Drużyna z {newItem.city}
                     </p>
@@ -193,7 +193,7 @@ function MatchCardBody(
     return (
         <div className="card-body">
             <h2 className="card-title">{item.host?.name} vs. {item.visitor?.name}</h2>
-            <h3 className="card-title">Sezon: {item.season}</h3>
+            <h3 className="card-title">Sezon: {item.season?.name}</h3>
             <p className={"text-gray-400"}>
                 {item.datetime ? item.datetime : "Nie ustawiono daty"}
             </p>
@@ -222,7 +222,6 @@ function SeasonCardBody(
     }
 ) {
     const {item, token, username} = props;
-    const router = useRouter();
     return (
         <div className="card-body">
             <h2 className="card-title">{item.name}</h2>

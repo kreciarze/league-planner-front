@@ -6,24 +6,36 @@ import useToken from "@/hooks/useToken";
 import Navbar from "@/components/navbar";
 import {leagueNavigation, teamNavigation} from "@/components/navbar/navigationObjects";
 import Footer from "@/components/footer/Footer";
-import {response, scoreBoardRecord, Season} from "@/types/types";
+import {Match, response, scoreBoardRecord, Season} from "@/types/types";
+import SelectInput from "@/components/selectInput";
+import {optionObject} from "@/components/selectInput/SelectInput";
 
 function Table() {
     const router = useRouter();
     const {token} = useToken();
     const leagueId = `${router.query.id}`;
     const [seasons, setSeasons] = useState<Season[]>([]);
+    const [seasonId, setSeasonId] = useState<string>("");
+    const [seasonOptions, setSeasonOptions] = useState<optionObject[]>([] as optionObject[]);
     const [scores, setScores] = useState<scoreBoardRecord[]>([] as scoreBoardRecord[]);
     useEffect(() => {
-        getSeasons(token.current, leagueId).then((seasons_data: response) => {
+        getSeasons(token.current, leagueId).then((seasons_data: Season[]) => {
             setSeasons(prev => {
-                prev = seasons_data?.results;
+                prev = seasons_data ?? [] as Season[];
+                return prev;
+            });
+            setSeasonOptions(prev => {
+                prev = seasons_data?.map((season: Season) => {
+                    return {
+                        value: season.id,
+                        label: season.name
+                    } as optionObject;
+                });
                 return prev;
             });
         });
     }, [leagueId, token]);
     useEffect(() => {
-        const seasonId = seasons?.[0]?.id.toString() ?? "0";
         getScoreboard(seasonId, token.current).then((scores_data: response) => {
             const results: scoreBoardRecord[] = scores_data?.results;
             setScores(prev => {
@@ -31,11 +43,15 @@ function Table() {
                 return prev;
             })
         });
-    }, [seasons]);
+    }, [seasons, seasonId]);
 
     return (
         <>
             <Navbar token={token.current} navigation={teamNavigation} />
+            <SelectInput title={"Sezon"} items={seasonOptions} setInputObject={(e: string) => {
+                setSeasonId(e);
+            }
+            }/>
             <div className={"min-h-screen"}>
                 <div className="card-body">
                     <table className="table w-full">

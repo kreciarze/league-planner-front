@@ -67,7 +67,7 @@ function TeamInputBody(
     const [seasonOptions, setSeasonOptions] = useState<optionObject[]>([] as optionObject[]);
     useEffect(() => {
         getSeasons(token.current, leagueId).then((seasons) => {
-            setSeasonOptions(seasons?.results.map((season: Season) => {
+            setSeasonOptions(seasons?.results?.map((season: Season) => {
                 return {
                     value: season.id,
                     label: season.name
@@ -144,15 +144,17 @@ function MatchInputBody(
     const [seasonOptions, setSeasonOptions] = useState<optionObject[]>([] as optionObject[]);
     useEffect(() => {
         getTeams(token.current, leagueId).then((teams) => {
-            setTeamOptions(teams?.results.map((team: Team) => {
-                return {
-                    value: team.id,
-                    label: team.name
-                }
-            }));
+            setTeamOptions(prev => {
+                return teams.map((team: Team) => {
+                    return {
+                        value: team.id,
+                        label: team.name
+                    }
+                })
+            });
         });
         getSeasons(token.current, leagueId).then((seasons) => {
-            setSeasonOptions(seasons?.results.map((season: Season) => {
+            setSeasonOptions(seasons?.map((season: Season) => {
                 return {
                     value: season.id,
                     label: season.name
@@ -254,6 +256,15 @@ function SeasonInputBody(
     const {token} = useToken();
     const router = useRouter();
 
+    useEffect(() => {
+        setInputObject((prev: Season) => {
+            return {
+                ...prev,
+                league: leagueId
+            }
+        });
+    }, [leagueId]);
+
     return (<>
         <InputField type={"text"} placeholder={"Nazwa sezonu"} onChange={(e: string) => {
             setInputObject((prev: Team) => {
@@ -263,7 +274,7 @@ function SeasonInputBody(
                 }
             })
         }} label={"Nazwa sezonu"} value={inputObject.name} required={true} />
-        <InputField type={"datetime-local"} placeholder={"Data rozpoczęcia"} onChange={(e: string) => {
+        <InputField type={"date"} placeholder={"Data rozpoczęcia"} onChange={(e: string) => {
             setInputObject((prev: Team) => {
                 return {
                     ...prev,
@@ -271,7 +282,7 @@ function SeasonInputBody(
                 }
             })
         }} label={"Data rozpoczęcia"} value={inputObject.start_date} required={true} />
-        <InputField type={"datetime-local"} placeholder={"Data zakończenia"} onChange={(e: string) => {
+        <InputField type={"date"} placeholder={"Data zakończenia"} onChange={(e: string) => {
             setInputObject((prev: Team) => {
                 return {
                     ...prev,
@@ -316,12 +327,6 @@ function SeasonInputBody(
                     setFailed(true);
                     return;
                 }
-                setInputObject((prev: Season) => {
-                    return {
-                        ...prev,
-                        league: leagueId
-                    }
-                });
                 createSeason(inputObject, token.current).then((response)=>{
                     if(response.ok)
                         router.push(`/leagueView/${leagueId}`)

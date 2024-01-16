@@ -10,7 +10,7 @@ export type Team = {
     number: number,
     name: string,
     league: number,
-    season: number,
+    season: Season,
     owner: string,
     city: string
 };
@@ -18,7 +18,7 @@ export type Team = {
 export type Match = {
     id: number,
     league: number,
-    season: number,
+    season: Season,
     host: Team,
     host_score: number,
     visitor: Team,

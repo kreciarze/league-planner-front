@@ -104,7 +104,7 @@ export async function updateLeague(
     league: League,
     token: string | null
 ) {
-    fetch(endpoints.leagueDetails.replace(':id', `${league.id}`), {
+    fetch(endpoints.leagueDetails.replace(':id', `${league.id}/`), {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -321,7 +321,7 @@ export async function getTeams(
     token: string | null,
     leagueId?: string,
     seasonId?: string
-) {
+):Promise<Team[]> {
     let url = getWithPagination(endpoints.teams, leagueId, 100, seasonId);
     return fetch(url, {
         method: 'GET',
@@ -338,12 +338,13 @@ export async function getTeams(
         })
         .then(
             (data) => {
-                return data;
+                let teams: Team[] = data.results;
+                return teams.filter((item: Team) => item.season.league === parseInt(leagueId || '-1')) || [];
             }
         )
         .catch(error => {
             console.log("Error while getting teams: ", error);
-        });
+        }) as Promise<Team[]>;
 }
 
 export async function createTeam(
@@ -465,10 +466,8 @@ export async function getMatches(
         })
         .then(
             (data) => {
-                console.log({
-                    data: data
-                })
-                return data;
+                let results: Match[] = data.results.filter((item: Match) => item.season.league === parseInt(leagueId || '-1'));
+                return results;
             }
         )
         .catch(error => {
@@ -500,7 +499,7 @@ export async function getSeasons(
         })
         .then(
             (data) => {
-                return data;
+                return data.results;
             }
         )
         .catch(error => {
